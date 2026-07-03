@@ -1,0 +1,106 @@
+#card {
+  position: relative;
+  width: 700px;
+  height: 1000px;
+  background: #eeeeee;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,.25);
+}
+
+/* 背景テンプレート */
+#background {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 1;
+}
+
+/* アップロード写真エリア */
+#photoArea {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 700px;
+  height: 1000px;
+  overflow: hidden;
+  z-index: 2;
+
+  background-size: 100% auto;
+  background-position: center center;
+  background-repeat: no-repeat;
+
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+}
+
+#photoArea:active {
+  cursor: grabbing;
+}
+
+/* フレーム */
+#frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* テキスト共通 */
+.draggable {
+  position: absolute;
+  color: #ffffff;
+  cursor: grab;
+  user-select: none;
+  white-space: pre-wrap;
+  text-shadow: 3px 3px 8px rgba(0,0,0,.5);
+  z-index: 4;
+  touch-action: none;
+}
+
+.draggable.dragging {
+  cursor: grabbing;
+}
+
+/* 名前 */
+#nameText {
+  left: 40px;
+  top: 780px;
+  font-size: 68px;
+  font-weight: bold;
+}
+
+/* 職業 */
+#jobText {
+  left: 45px;
+  top: 865px;
+  font-size: 32px;
+}
+
+#subjobText {
+  left: 45px;
+  top: 905px;
+  font-size: 22px;
+}
+
+/* 説明 */
+#descText {
+  left: 45px;
+  top: 970px;
+  width: 610px;
+  font-size: 22px;
+  line-height: 1.5;
+}
+
+/* 小さい画面でもカード比率を維持 */
+@media (max-width: 900px) {
+  #card {
+    width: 700px;
+    height: 1000px;
+  }
+}

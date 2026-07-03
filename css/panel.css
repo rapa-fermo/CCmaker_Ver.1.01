@@ -1,0 +1,161 @@
+.panel {
+  width: 340px;
+  min-width: 340px;
+  height: 100vh;
+  background: #ffffff;
+  padding: 20px;
+  border-right: 1px solid #dddddd;
+  overflow-y: auto;
+}
+
+.panel h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 22px;
+}
+
+.panel label {
+  display: block;
+  margin-top: 14px;
+  margin-bottom: 6px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.panel input[type="text"],
+.panel textarea,
+.panel select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #cccccc;
+  border-radius: 8px;
+  font-size: 14px;
+  background: #ffffff;
+}
+
+.panel textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.panel input[type="file"],
+.panel input[type="range"],
+.panel input[type="color"] {
+  width: 100%;
+}
+
+.panel input[type="color"] {
+  height: 42px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.panel .check {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  font-weight: normal;
+}
+
+.panel .check input {
+  width: auto;
+}
+
+.panel button {
+  width: 100%;
+  margin-top: 12px;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: #3b82f6;
+  color: #ffffff;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.panel button:hover {
+  background: #2563eb;
+}
+
+.panel hr {
+  margin: 22px 0;
+  border: none;
+  border-top: 1px solid #dddddd;
+}
+
+.job-group {
+  margin-bottom: 15px;
+}
+
+.job-title {
+  font-size: 13px;
+  font-weight: bold;
+  margin: 10px 0 6px;
+  color: #666;
+}
+
+.main-job-buttons,
+.sub-job-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.main-job-buttons label,
+.sub-job-buttons label {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  background: #f5f5f5;
+  cursor: pointer;
+  font-size: 12px;
+  margin: 0;
+  font-weight: normal;
+}
+
+.main-job-buttons input,
+.sub-job-buttons input {
+  display: none;
+}
+
+.main-job-buttons label:has(input:checked) {
+  background: #ef4444;
+  color: #fff;
+  border-color: #ef4444;
+}
+
+.sub-job-buttons label:has(input:checked) {
+  background: #3b82f6;
+  color: #fff;
+  border-color: #3b82f6;
+}
+
+.notice-box {
+  margin: 12px 0 18px;
+  padding: 12px;
+  border: 1px solid #f0c36d;
+  border-radius: 8px;
+  background: #fff8e5;
+  color: #5c4200;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.notice-box strong {
+  display: block;
+  margin-bottom: 6px;
+}
+
+
+@media (max-width: 900px) {
+  .panel {
+    width: 100%;
+    min-width: 0;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid #dddddd;
+  }
+}

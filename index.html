@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Character Card Maker</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&family=Cinzel:wght@400..900&family=Orbitron:wght@400..900&family=Bebas+Neue&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/panel.css">
+  <link rel="stylesheet" href="css/card.css">
+</head>
+
+<body>
+<div class="container">
+
+  <aside class="panel">
+    <h2>カード編集</h2>
+
+<div class="notice-box">
+  <strong>⚠ ご利用にあたっての注意</strong>
+  <p>
+    このツールで作成したカードは、FINAL FANTASY XIV のキャラクターを対象としています。<br>
+    それ以外の作品・版権キャラクターへのご使用はお控えください。
+  </p>
+</div>
+
+
+    <label>名前</label>
+    <input id="nameInput" type="text" placeholder="名前">
+
+<label>メインジョブ</label>
+
+<div class="job-group">
+  <div class="job-title">ファイター</div>
+  <div class="main-job-buttons">
+    <label><input type="radio" name="mainJob" value="ナイト">ナイト</label>
+    <label><input type="radio" name="mainJob" value="戦士">戦士</label>
+    <label><input type="radio" name="mainJob" value="暗黒騎士">暗黒騎士</label>
+    <label><input type="radio" name="mainJob" value="ガンブレイカー">ガンブレイカー</label>
+  </div>
+</div>
+
+<div class="job-group">
+  <div class="job-title">ヒーラー</div>
+  <div class="main-job-buttons">
+    <label><input type="radio" name="mainJob" value="白魔道士">白魔道士</label>
+    <label><input type="radio" name="mainJob" value="学者">学者</label>
+    <label><input type="radio" name="mainJob" value="占星術師">占星術師</label>
+    <label><input type="radio" name="mainJob" value="賢者">賢者</label>
+  </div>
+</div>
+
+<div class="job-group">
+  <div class="job-title">近接DPS</div>
+  <div class="main-job-buttons">
+    <label><input type="radio" name="mainJob" value="モンク">モンク</label>
+    <label><input type="radio" name="mainJob" value="竜騎士">竜騎士</label>
+    <label><input type="radio" name="mainJob" value="忍者">忍者</label>
+    <label><input type="radio" name="mainJob" value="侍">侍</label>
+    <label><input type="radio" name="mainJob" value="リーパー">リーパー</label>
+    <label><input type="radio" name="mainJob" value="ヴァイパー">ヴァイパー</label>
+  </div>
+</div>
+
+<div class="job-group">
+  <div class="job-title">遠隔物理DPS</div>
+  <div class="main-job-buttons">
+    <label><input type="radio" name="mainJob" value="吟遊詩人">吟遊詩人</label>
+    <label><input type="radio" name="mainJob" value="機工士">機工士</label>
+    <label><input type="radio" name="mainJob" value="踊り子">踊り子</label>
+  </div>
+</div>
+
+<div class="job-group">
+  <div class="job-title">遠隔魔法DPS</div>
+  <div class="main-job-buttons">
+    <label><input type="radio" name="mainJob" value="黒魔道士">黒魔道士</label>
+    <label><input type="radio" name="mainJob" value="召喚士">召喚士</label>
+    <label><input type="radio" name="mainJob" value="赤魔道士">赤魔道士</label>
+    <label><input type="radio" name="mainJob" value="ピクトマンサー">ピクトマンサー</label>
+  </div>
+</div>
+
+<hr>
+
+<label>サブジョブ</label>
+
+<div class="job-group">
+  <div class="job-title">ファイター</div>
+  <div class="sub-job-buttons">
+    <label><input type="checkbox" value="ナイト">ナイト</label>
+    <label><input type="checkbox" value="戦士">戦士</label>
+    <label><input type="checkbox" value="暗黒騎士">暗黒騎士</label>
+    <label><input type="checkbox" value="ガンブレイカー">ガンブレイカー</label>
+  </div>
+</div>
+
+<div class="job-group">
+  <div class="job-title">ヒーラー</div>
+  <div class="sub-job-buttons">
+    <label><input type="checkbox" value="白魔道士">白魔道士</label>
+    <label><input type="checkbox" value="学者">学者</label>
+    <label><input type="checkbox" value="占星術師">占星術師</label>
+    <label><input type="checkbox" value="賢者">賢者</label>
+  </div>
+</div>
+
+<div class="job-group">
+  <div class="job-title">近接DPS</div>
+  <div class="sub-job-buttons">
+    <label><input type="checkbox" value="モンク">モンク</label>
+    <label><input type="checkbox" value="竜騎士">竜騎士</label>
+    <label><input type="checkbox" value="忍者">忍者</label>
+    <label><input type="checkbox" value="侍">侍</label>
+    <label><input type="checkbox" value="リーパー">リーパー</label>
+    <label><input type="checkbox" value="ヴァイパー">ヴァイパー</label>
+  </div>
+</div>
+
+<div class="job-group">
+  <div class="job-title">遠隔物理DPS</div>
+  <div class="sub-job-buttons">
+    <label><input type="checkbox" value="吟遊詩人">吟遊詩人</label>
+    <label><input type="checkbox" value="機工士">機工士</label>
+    <label><input type="checkbox" value="踊り子">踊り子</label>
+  </div>
+</div>
+
+<div class="job-group">
+  <div class="job-title">遠隔魔法DPS</div>
+  <div class="sub-job-buttons">
+    <label><input type="checkbox" value="黒魔道士">黒魔道士</label>
+    <label><input type="checkbox" value="召喚士">召喚士</label>
+    <label><input type="checkbox" value="赤魔道士">赤魔道士</label>
+    <label><input type="checkbox" value="ピクトマンサー">ピクトマンサー</label>
+  </div>
+</div>
+
+    <label>説明</label>
+    <textarea id="descInput" placeholder="説明文"></textarea>
+
+    <hr>
+
+    <label>写真</label>
+    <input id="photoInput" type="file" accept="image/*">
+
+    <hr>
+
+    <label>テンプレート</label>
+    <select id="templateSelect"></select>
+
+    <hr>
+
+    <label>フォント</label>
+    <select id="fontSelect">
+      <option value="Noto Sans JP">Noto Sans JP</option>
+      <option value="Cinzel">Cinzel</option>
+      <option value="Orbitron">Orbitron</option>
+      <option value="Bebas Neue">Bebas Neue</option>
+      <option value="serif">serif</option>
+      <option value="sans-serif">sans-serif</option>
+    </select>
+
+    <label>文字サイズ</label>
+    <input id="fontSize" type="range" min="12" max="120" value="60">
+
+    <label>文字色</label>
+    <input id="fontColor" type="color" value="#ffffff">
+
+    <label class="check">
+      <input id="boldCheck" type="checkbox">
+      太字
+    </label>
+
+    <hr>
+
+    <button id="saveButton">PNG保存</button>
+    <button id="saveJson">JSON保存</button>
+
+    <label>JSON読込</label>
+    <input id="loadJson" type="file" accept=".json">
+  </aside>
+
+<main class="preview">
+  <div class="card-shell">
+  <div id="card">
+
+    <div id="background"></div>
+
+    <div id="photoArea"></div>
+
+    <img id="frame" alt="">
+
+    <div id="nameText" class="draggable" data-key="name">名前</div>
+    <div id="jobText" class="draggable" data-key="job">メインジョブ</div>
+    <div id="subjobText" class="draggable" data-key="subjob">サブジョブ</div>
+    <div id="descText" class="draggable" data-key="desc">説明文</div>
+
+  </div>
+  </div>
+</main>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+<script src="templates/templates.js"></script>
+<script src="js/script.js"></script>
+<script src="js/responsive.js"></script>
+<script src="js/template.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/upload.js"></script>
+<script src="js/drag.js"></script>
+<script src="js/export.js"></script>
+</body>
+</html>
