@@ -61,15 +61,48 @@ document.addEventListener("DOMContentLoaded", () => {
 
       document.body.removeChild(clone);
 
-      const link = document.createElement("a");
-      link.download = createName("png");
-      link.href = canvas.toDataURL("image/png");
-      link.click();
+      const fileName = createName("png");
+      const blob = await canvasToBlob(canvas);
+      const file = new File([blob], fileName, { type: "image/png" });
+
+      // スマホでは共有シートを開き、「写真に保存」を選べるようにする
+      if (isMobileDevice() && navigator.canShare && navigator.canShare({ files: [file] }) && navigator.share) {
+        await navigator.share({
+          files: [file],
+          title: "Character Card",
+          text: "作成したキャラクターカードです"
+        });
+      } else {
+        // PC・共有非対応ブラウザでは従来通りダウンロード
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.download = fileName;
+        link.href = url;
+        link.click();
+        URL.revokeObjectURL(url);
+      }
 
     } catch (err) {
       console.error(err);
       alert("PNG保存に失敗しました");
     }
+  }
+
+
+  function canvasToBlob(canvas) {
+    return new Promise((resolve, reject) => {
+      canvas.toBlob(blob => {
+        if (blob) {
+          resolve(blob);
+        } else {
+          reject(new Error("PNG変換に失敗しました"));
+        }
+      }, "image/png");
+    });
+  }
+
+  function isMobileDevice() {
+    return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
   }
 
   function loadImage(src) {
