@@ -24,7 +24,6 @@ document.addEventListener("DOMContentLoaded", () => {
       document.body.appendChild(clone);
 
       const clonePhotoArea = clone.querySelector("#photoArea");
-
       clonePhotoArea.style.backgroundImage = "none";
 
       if (App.state.photo) {
@@ -65,29 +64,34 @@ document.addEventListener("DOMContentLoaded", () => {
       const blob = await canvasToBlob(canvas);
       const file = new File([blob], fileName, { type: "image/png" });
 
-      // スマホでは共有シートを開き、「写真に保存」を選べるようにする
-      if (isMobileDevice() && navigator.canShare && navigator.canShare({ files: [file] }) && navigator.share) {
-        await navigator.share({
-          files: [file],
-          title: "Character Card",
-          text: "作成したキャラクターカードです"
-        });
-      } else {
-        // PC・共有非対応ブラウザでは従来通りダウンロード
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.download = fileName;
-        link.href = url;
-        link.click();
-        URL.revokeObjectURL(url);
+      // スマホではWeb Share APIを優先して、共有シートから「写真に保存」を選べるようにする
+      if (isMobileDevice() && navigator.share) {
+        try {
+          // files共有に対応している端末ではPNGファイルを直接共有
+          if (!navigator.canShare || navigator.canShare({ files: [file] })) {
+            await navigator.share({
+              files: [file],
+              title: "Character Card"
+            });
+            return;
+          }
+        } catch (shareError) {
+          // ユーザーが共有をキャンセルした場合は、通常ダウンロードへ落とさない
+          if (shareError && (shareError.name === "AbortError" || shareError.name === "NotAllowedError")) {
+            return;
+          }
+          console.warn("共有保存に失敗したため通常保存に切り替えます", shareError);
+        }
       }
+
+      // PC、または共有非対応ブラウザでは従来通りダウンロード
+      downloadBlob(blob, fileName);
 
     } catch (err) {
       console.error(err);
       alert("PNG保存に失敗しました");
     }
   }
-
 
   function canvasToBlob(canvas) {
     return new Promise((resolve, reject) => {
@@ -104,6 +108,16 @@ document.addEventListener("DOMContentLoaded", () => {
   function isMobileDevice() {
     return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
   }
+
+  function downloadBlob(blob, fileName) {
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.download = fileName;
+    link.href = url;
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+
 
   function loadImage(src) {
     return new Promise((resolve, reject) => {
