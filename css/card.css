@@ -88,10 +88,10 @@
   font-size: 22px;
 }
 
-/* 説明 */
+/* 自己アピール */
 #descText {
   left: 45px;
-  top: 970px;
+  top: 850px;
   width: 610px;
   font-size: 22px;
   line-height: 1.5;
@@ -103,4 +103,28 @@
     width: 700px;
     height: 1000px;
   }
+}
+
+#titleText {
+  left: 45px;
+  top: 40px;
+  font-size: 54px;
+  font-weight: bold;
+  letter-spacing: .04em;
+}
+
+#worldText {
+  left: 45px;
+  top: 930px;
+  width: 610px;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 1.4;
+}
+
+#copyrightText {
+  left: 40px;
+  top: 960px;
+  font-size: 18px;
+  z-index: 5;
 }

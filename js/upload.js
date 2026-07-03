@@ -3,6 +3,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const photoInput =
     document.getElementById("photoInput");
 
+  const backgroundInput =
+    document.getElementById("backgroundInput");
+
   const photoArea =
     App.el.photoArea;
 
@@ -14,6 +17,37 @@ document.addEventListener("DOMContentLoaded", () => {
     "change",
     loadPhoto
   );
+
+  if (backgroundInput) {
+    backgroundInput.addEventListener(
+      "change",
+      loadBackground
+    );
+  }
+
+  function loadBackground(e) {
+
+    const file =
+      e.target.files[0];
+
+    if (!file) return;
+
+    const reader =
+      new FileReader();
+
+    reader.onload = () => {
+
+      App.state.background =
+        reader.result;
+
+      App.render();
+      App.saveLocal();
+
+    };
+
+    reader.readAsDataURL(file);
+
+  }
 
   function loadPhoto(e) {
 

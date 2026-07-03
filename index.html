@@ -145,18 +145,93 @@
   </div>
 </div>
 
-    <label>説明</label>
-    <textarea id="descInput" placeholder="説明文"></textarea>
+    <label>自己アピール</label>
+    <textarea id="descInput" placeholder="自己アピール"></textarea>
+
+    <label>活動ワールド</label>
+    <select id="worldSelect">
+      <option value="">未選択</option>
+
+      <optgroup label="JP / Elemental">
+        <option>Aegis</option><option>Atomos</option><option>Carbuncle</option><option>Garuda</option>
+        <option>Gungnir</option><option>Kujata</option><option>Tonberry</option><option>Typhon</option>
+      </optgroup>
+
+      <optgroup label="JP / Gaia">
+        <option>Alexander</option><option>Bahamut</option><option>Durandal</option><option>Fenrir</option>
+        <option>Ifrit</option><option>Ridill</option><option>Tiamat</option><option>Ultima</option>
+      </optgroup>
+
+      <optgroup label="JP / Mana">
+        <option>Anima</option><option>Asura</option><option>Chocobo</option><option>Hades</option>
+        <option>Ixion</option><option>Masamune</option><option>Pandaemonium</option><option>Titan</option>
+      </optgroup>
+
+      <optgroup label="JP / Meteor">
+        <option>Belias</option><option>Mandragora</option><option>Ramuh</option><option>Shinryu</option>
+        <option>Unicorn</option><option>Valefor</option><option>Yojimbo</option><option>Zeromus</option>
+      </optgroup>
+
+      <optgroup label="NA / Aether">
+        <option>Adamantoise</option><option>Cactuar</option><option>Faerie</option><option>Gilgamesh</option>
+        <option>Jenova</option><option>Midgardsormr</option><option>Sargatanas</option><option>Siren</option>
+      </optgroup>
+
+      <optgroup label="NA / Crystal">
+        <option>Balmung</option><option>Brynhildr</option><option>Coeurl</option><option>Diabolos</option>
+        <option>Goblin</option><option>Malboro</option><option>Mateus</option><option>Zalera</option>
+      </optgroup>
+
+      <optgroup label="NA / Dynamis">
+        <option>Cuchulainn</option><option>Golem</option><option>Halicarnassus</option><option>Kraken</option>
+        <option>Maduin</option><option>Marilith</option><option>Rafflesia</option><option>Seraph</option>
+      </optgroup>
+
+      <optgroup label="NA / Primal">
+        <option>Behemoth</option><option>Excalibur</option><option>Exodus</option><option>Famfrit</option>
+        <option>Hyperion</option><option>Lamia</option><option>Leviathan</option><option>Ultros</option>
+      </optgroup>
+
+      <optgroup label="EU / Chaos">
+        <option>Cerberus</option><option>Louisoix</option><option>Moogle</option><option>Omega</option>
+        <option>Phantom</option><option>Ragnarok</option><option>Sagittarius</option><option>Spriggan</option>
+      </optgroup>
+
+      <optgroup label="EU / Light">
+        <option>Alpha</option><option>Lich</option><option>Odin</option><option>Phoenix</option>
+        <option>Raiden</option><option>Shiva</option><option>Twintania</option><option>Zodiark</option>
+      </optgroup>
+
+      <optgroup label="OC / Materia">
+        <option>Bismarck</option><option>Ravana</option><option>Sephirot</option><option>Sophia</option><option>Zurvan</option>
+      </optgroup>
+    </select>
 
     <hr>
 
     <label>写真</label>
     <input id="photoInput" type="file" accept="image/*">
 
+    <label>背景画像</label>
+    <input id="backgroundInput" type="file" accept="image/*">
+
     <hr>
 
     <label>テンプレート</label>
     <select id="templateSelect"></select>
+
+    <label class="check">
+      <input id="frameToggle" type="checkbox" checked>
+      フレームを使用する
+    </label>
+
+    <div id="noFrameOptions" class="noframe-options">
+      <label>タイトル</label>
+      <input id="titleInput" type="text" placeholder="タイトル">
+
+      <label>コピーライト色</label>
+      <input id="copyrightColor" type="color" value="#ffffff">
+    </div>
 
     <hr>
 
@@ -200,10 +275,13 @@
 
     <img id="frame" alt="">
 
+    <div id="titleText" class="draggable" data-key="title">TITLE</div>
     <div id="nameText" class="draggable" data-key="name">名前</div>
     <div id="jobText" class="draggable" data-key="job">メインジョブ</div>
     <div id="subjobText" class="draggable" data-key="subjob">サブジョブ</div>
-    <div id="descText" class="draggable" data-key="desc">説明文</div>
+    <div id="descText" class="draggable" data-key="desc">自己アピール</div>
+    <div id="worldText" class="draggable" data-key="world">活動ワールド</div>
+    <div id="copyrightText" class="draggable" data-key="copyright">© SQUARE ENIX</div>
 
   </div>
   </div>

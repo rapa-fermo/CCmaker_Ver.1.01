@@ -1,6 +1,6 @@
 window.templates = {
   fantasy: {
-    name: "Fantasy",
+    name: "WOL",
     background: "assets/backgrounds/bg1.jpg",
     frame: "assets/frames/frame1.png",
     font: "Cinzel",
@@ -15,7 +15,7 @@ window.templates = {
   },
 
   cyber: {
-    name: "Cyber",
+    name: "Solution Nine",
     background: "assets/backgrounds/bg2.jpg",
     frame: "assets/frames/frame2.png",
     font: "Orbitron",
@@ -30,7 +30,7 @@ window.templates = {
   },
 
   simple: {
-    name: "Simple",
+    name: "Tuliyollal",
     background: "assets/backgrounds/bg3.jpg",
     frame: "assets/frames/frame3.png",
     font: "Noto Sans JP",

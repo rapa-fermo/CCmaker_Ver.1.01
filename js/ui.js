@@ -1,6 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
   const nameInput = document.getElementById("nameInput");
   const descInput = document.getElementById("descInput");
+  const worldSelect = document.getElementById("worldSelect");
+  const frameToggle = document.getElementById("frameToggle");
+  const noFrameOptions = document.getElementById("noFrameOptions");
+  const titleInput = document.getElementById("titleInput");
+  const copyrightColor = document.getElementById("copyrightColor");
 
   const fontSelect = document.getElementById("fontSelect");
   const fontSize = document.getElementById("fontSize");
@@ -9,6 +14,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   nameInput.value = App.state.texts.name.value;
   descInput.value = App.state.texts.desc.value;
+  worldSelect.value = App.state.texts.world.value === "活動ワールド" ? "" : App.state.texts.world.value;
+  titleInput.value = App.state.texts.title.value;
+  frameToggle.checked = App.state.frameEnabled !== false;
+  copyrightColor.value = App.state.texts.copyright.color;
+  updateNoFrameOptions();
 
   nameInput.addEventListener("input", () => {
     App.state.texts.name.value = nameInput.value || "名前";
@@ -17,10 +27,39 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   descInput.addEventListener("input", () => {
-    App.state.texts.desc.value = descInput.value || "説明文";
+    App.state.texts.desc.value = descInput.value || "自己アピール";
     App.render();
     App.saveLocal();
   });
+
+  worldSelect.addEventListener("change", () => {
+    App.state.texts.world.value = worldSelect.value || "活動ワールド";
+    App.render();
+    App.saveLocal();
+  });
+
+  frameToggle.addEventListener("change", () => {
+    App.state.frameEnabled = frameToggle.checked;
+    updateNoFrameOptions();
+    App.render();
+    App.saveLocal();
+  });
+
+  titleInput.addEventListener("input", () => {
+    App.state.texts.title.value = titleInput.value || "TITLE";
+    App.render();
+    App.saveLocal();
+  });
+
+  copyrightColor.addEventListener("input", () => {
+    App.state.texts.copyright.color = copyrightColor.value;
+    App.render();
+    App.saveLocal();
+  });
+
+  function updateNoFrameOptions() {
+    noFrameOptions.style.display = frameToggle.checked ? "none" : "block";
+  }
 
   document.querySelectorAll('input[name="mainJob"]').forEach(input => {
     if (input.value === App.state.texts.job.value) {
@@ -126,6 +165,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   fontColor.addEventListener("input", () => {
     App.state.texts[App.selectedKey].color = fontColor.value;
+    if (App.selectedKey === "copyright") {
+      copyrightColor.value = fontColor.value;
+    }
     App.render();
     App.saveLocal();
   });
@@ -143,11 +185,19 @@ document.addEventListener("DOMContentLoaded", () => {
     fontSize.value = t.size;
     fontColor.value = t.color;
     boldCheck.checked = t.bold;
+    if (App.selectedKey === "copyright") {
+      copyrightColor.value = t.color;
+    }
   };
 
   window.syncEditorInputs = function() {
     nameInput.value = App.state.texts.name.value === "名前" ? "" : App.state.texts.name.value;
-    descInput.value = App.state.texts.desc.value === "説明文" ? "" : App.state.texts.desc.value;
+    descInput.value = App.state.texts.desc.value === "自己アピール" || App.state.texts.desc.value === "説明文" ? "" : App.state.texts.desc.value;
+    worldSelect.value = App.state.texts.world.value === "活動ワールド" ? "" : App.state.texts.world.value;
+    titleInput.value = App.state.texts.title.value === "TITLE" ? "" : App.state.texts.title.value;
+    frameToggle.checked = App.state.frameEnabled !== false;
+    copyrightColor.value = App.state.texts.copyright.color;
+    updateNoFrameOptions();
 
     document.querySelectorAll('input[name="mainJob"]').forEach(input => {
       input.checked = input.value === App.state.texts.job.value;

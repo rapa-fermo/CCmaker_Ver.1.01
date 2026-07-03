@@ -7,6 +7,7 @@ window.App = {
 
     background: "",
     frame: "",
+    frameEnabled: true,
 
     photo: "",
 
@@ -24,6 +25,17 @@ window.App = {
     },
 
     texts: {
+title: {
+  value: "TITLE",
+  x: 45,
+  y: 40,
+  size: 54,
+  color: "#ffffff",
+  font: "Cinzel",
+  bold: true,
+  shadow: true
+},
+
 name: {
   value: "名前",
   x: 40,
@@ -58,10 +70,32 @@ subjob: {
 },
 
 desc: {
-  value: "説明文",
+  value: "自己アピール",
   x: 45,
-  y: 950,
+  y: 850,
   size: 22,
+  color: "#ffffff",
+  font: "Noto Sans JP",
+  bold: false,
+  shadow: true
+},
+
+world: {
+  value: "活動ワールド",
+  x: 45,
+  y: 930,
+  size: 24,
+  color: "#ffffff",
+  font: "Noto Sans JP",
+  bold: true,
+  shadow: true
+},
+
+copyright: {
+  value: "© SQUARE ENIX",
+  x: 40,
+  y: 960,
+  size: 18,
   color: "#ffffff",
   font: "Noto Sans JP",
   bold: false,
@@ -78,10 +112,13 @@ desc: {
     this.el.photoArea = document.getElementById("photoArea");
     this.el.frame = document.getElementById("frame");
 
+    this.el.titleText = document.getElementById("titleText");
     this.el.nameText = document.getElementById("nameText");
     this.el.jobText = document.getElementById("jobText");
     this.el.subjobText = document.getElementById("subjobText");
     this.el.descText = document.getElementById("descText");
+    this.el.worldText = document.getElementById("worldText");
+    this.el.copyrightText = document.getElementById("copyrightText");
 
     this.loadLocal();
     this.render();
@@ -101,7 +138,10 @@ desc: {
         : "";
 
     this.el.frame.src =
-      this.state.frame || "";
+      this.state.frameEnabled ? (this.state.frame || "") : "";
+
+    this.el.frame.style.display =
+      this.state.frameEnabled ? "block" : "none";
   },
 
   renderPhotoArea() {
@@ -132,10 +172,15 @@ desc: {
   },
 
 renderTexts() {
+  this.applyText(this.el.titleText, this.state.texts.title);
+  this.el.titleText.style.display = this.state.frameEnabled ? "none" : "block";
   this.applyText(this.el.nameText, this.state.texts.name);
   this.applyText(this.el.jobText, this.state.texts.job);
   this.applyText(this.el.subjobText, this.state.texts.subjob);
   this.applyText(this.el.descText, this.state.texts.desc);
+  this.applyText(this.el.worldText, this.state.texts.world);
+  this.applyText(this.el.copyrightText, this.state.texts.copyright);
+  this.el.copyrightText.style.display = this.state.frameEnabled ? "none" : "block";
 },
 
   applyText(el, data) {

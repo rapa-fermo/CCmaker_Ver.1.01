@@ -1,4 +1,4 @@
-const CACHE_NAME = "ccmaker-v14-pwa";
+const CACHE_NAME = "ccmaker-v16-world";
 
 const APP_FILES = [
   "./",
