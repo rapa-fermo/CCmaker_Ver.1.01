@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="css/card.css">
 </head>
 
+
 <body>
 <div class="container">
 
@@ -216,5 +217,53 @@
 <script src="js/upload.js"></script>
 <script src="js/drag.js"></script>
 <script src="js/export.js"></script>
+<script src="js/export.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+
+  const inputs=document.querySelectorAll(
+    'input, textarea, select'
+  );
+
+  inputs.forEach(el=>{
+
+    el.addEventListener('focus',()=>{
+
+      document.body.classList.add('editing');
+
+      setTimeout(()=>{
+        el.scrollIntoView({
+          behavior:'smooth',
+          block:'center'
+        });
+      },300);
+
+    });
+
+    el.addEventListener('blur',()=>{
+
+      setTimeout(()=>{
+
+        const active=document.activeElement;
+
+        if(
+          active &&
+          active.tagName !== 'INPUT' &&
+          active.tagName !== 'TEXTAREA' &&
+          active.tagName !== 'SELECT'
+        ){
+          document.body.classList.remove('editing');
+        }
+
+      },100);
+
+    });
+
+  });
+
+});
+</script>
+
 </body>
 </html>
