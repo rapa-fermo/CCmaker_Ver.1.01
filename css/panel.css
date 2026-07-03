@@ -159,3 +159,32 @@
     border-bottom: 1px solid #dddddd;
   }
 }
+
+@media (max-width:768px){
+
+  input,
+  textarea,
+  select{
+    font-size:16px;
+    min-height:44px;
+    width:100%;
+    box-sizing:border-box;
+  }
+
+  textarea{
+    min-height:140px;
+    line-height:1.5;
+  }
+
+  .panel label{
+    display:block;
+    margin-top:10px;
+    margin-bottom:4px;
+  }
+
+  body.editing .preview{
+    position:static !important;
+    top:auto !important;
+  }
+
+}
