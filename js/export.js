@@ -8,46 +8,67 @@ document.addEventListener("DOMContentLoaded", () => {
   loadJson.addEventListener("change", loadJSON);
 
   async function savePNG() {
+    let holder = null;
+
     try {
       if (document.fonts) {
         await document.fonts.ready;
       }
 
+      // html2canvas が背景画像・写真・フレームを取得しきる前に描画すると
+      // スマホで失敗することがあるため、使用中画像を先に読み込む
+      await preloadExportImages();
+
       const clone = App.el.card.cloneNode(true);
 
-      clone.style.position = "fixed";
-      clone.style.left = "-9999px";
-      clone.style.top = "0";
       clone.style.width = "700px";
       clone.style.height = "1000px";
+      clone.style.transform = "none";
+      clone.style.margin = "0";
 
-      document.body.appendChild(clone);
+      // iOS Safari では left:-9999px のような画面外要素で
+      // html2canvas が失敗することがあるため、透明な固定領域に置く
+      holder = document.createElement("div");
+      holder.style.position = "fixed";
+      holder.style.left = "0";
+      holder.style.top = "0";
+      holder.style.width = "700px";
+      holder.style.height = "1000px";
+      holder.style.overflow = "hidden";
+      holder.style.opacity = "0";
+      holder.style.pointerEvents = "none";
+      holder.style.zIndex = "-1";
+      holder.appendChild(clone);
+      document.body.appendChild(holder);
 
       const clonePhotoArea = clone.querySelector("#photoArea");
-      clonePhotoArea.style.backgroundImage = "none";
+      if (clonePhotoArea) {
+        clonePhotoArea.style.backgroundImage = "none";
 
-      if (App.state.photo) {
-        const img = await loadImage(App.state.photo);
+        if (App.state.photo) {
+          const img = await loadImage(App.state.photo);
 
-        const area = App.state.photoArea;
-        const p = App.state.photoTransform;
+          const area = App.state.photoArea;
+          const p = App.state.photoTransform;
 
-        const ratio = Math.min(
-          area.width / img.naturalWidth,
-          area.height / img.naturalHeight
-        );
+          const ratio = Math.min(
+            area.width / img.naturalWidth,
+            area.height / img.naturalHeight
+          );
 
-        const w = img.naturalWidth * ratio * p.scale;
-        const h = img.naturalHeight * ratio * p.scale;
+          const w = img.naturalWidth * ratio * p.scale;
+          const h = img.naturalHeight * ratio * p.scale;
 
-        img.style.position = "absolute";
-        img.style.width = w + "px";
-        img.style.height = h + "px";
-        img.style.left = (area.width - w) / 2 + p.x + "px";
-        img.style.top = (area.height - h) / 2 + p.y + "px";
-        img.style.maxWidth = "none";
+          img.style.position = "absolute";
+          img.style.width = w + "px";
+          img.style.height = h + "px";
+          img.style.left = (area.width - w) / 2 + p.x + "px";
+          img.style.top = (area.height - h) / 2 + p.y + "px";
+          img.style.maxWidth = "none";
+          img.style.pointerEvents = "none";
 
-        clonePhotoArea.appendChild(img);
+          clonePhotoArea.appendChild(img);
+        }
       }
 
       const canvas = await html2canvas(clone, {
@@ -55,10 +76,12 @@ document.addEventListener("DOMContentLoaded", () => {
         scale: 2,
         useCORS: true,
         allowTaint: true,
-        logging: false
+        logging: false,
+        imageTimeout: 15000
       });
 
-      document.body.removeChild(clone);
+      holder.remove();
+      holder = null;
 
       const fileName = createName("png");
       const blob = await canvasToBlob(canvas);
@@ -67,7 +90,6 @@ document.addEventListener("DOMContentLoaded", () => {
       // スマホではWeb Share APIを優先して、共有シートから「写真に保存」を選べるようにする
       if (isMobileDevice() && navigator.share) {
         try {
-          // files共有に対応している端末ではPNGファイルを直接共有
           if (!navigator.canShare || navigator.canShare({ files: [file] })) {
             await navigator.share({
               files: [file],
@@ -76,7 +98,6 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
           }
         } catch (shareError) {
-          // ユーザーが共有をキャンセルした場合は、通常ダウンロードへ落とさない
           if (shareError && (shareError.name === "AbortError" || shareError.name === "NotAllowedError")) {
             return;
           }
@@ -84,13 +105,30 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
 
-      // PC、または共有非対応ブラウザでは従来通りダウンロード
       downloadBlob(blob, fileName);
 
     } catch (err) {
       console.error(err);
-      alert("PNG保存に失敗しました");
+      alert("PNG保存に失敗しました。ページを再読み込みしてからもう一度お試しください。");
+    } finally {
+      if (holder && holder.parentNode) {
+        holder.remove();
+      }
     }
+  }
+
+  async function preloadExportImages() {
+    const targets = [
+      App.state.background,
+      App.state.frame,
+      App.state.photo
+    ].filter(Boolean);
+
+    await Promise.all(
+      targets.map(src => loadImage(src).catch(err => {
+        console.warn("画像の事前読み込みに失敗しました", err);
+      }))
+    );
   }
 
   function canvasToBlob(canvas) {

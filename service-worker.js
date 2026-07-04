@@ -1,4 +1,4 @@
-const CACHE_NAME = "ccmaker-v16-world";
+const CACHE_NAME = "ccmaker-v25-mobile-ui";
 
 const APP_FILES = [
   "./",
@@ -9,9 +9,11 @@ const APP_FILES = [
   "./css/card.css",
   "./js/script.js",
   "./js/responsive.js",
+  "./js/mobile-ui.js",
   "./js/template.js",
   "./js/ui.js",
   "./js/upload.js",
+  "./js/background-drag.js",
   "./js/drag.js",
   "./js/export.js",
   "./templates/templates.js",
@@ -44,13 +46,28 @@ self.addEventListener("activate", event => {
 self.addEventListener("fetch", event => {
   if (event.request.method !== "GET") return;
 
+  const request = event.request;
+
+  if (request.mode === "navigate") {
+    event.respondWith(
+      fetch(request)
+        .then(response => {
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put("./index.html", copy));
+          return response;
+        })
+        .catch(() => caches.match("./index.html"))
+    );
+    return;
+  }
+
   event.respondWith(
-    caches.match(event.request).then(cached => {
+    caches.match(request).then(cached => {
       if (cached) return cached;
-      return fetch(event.request).then(response => {
+      return fetch(request).then(response => {
         const copy = response.clone();
-        if (response.ok && new URL(event.request.url).origin === location.origin) {
-          caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
+        if (response.ok && new URL(request.url).origin === location.origin) {
+          caches.open(CACHE_NAME).then(cache => cache.put(request, copy));
         }
         return response;
       }).catch(() => caches.match("./index.html"));

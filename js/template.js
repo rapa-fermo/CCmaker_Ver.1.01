@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
     App.state.template = key;
     App.state.background = t.background || "";
     App.state.frame = t.frame || "";
+    App.state.backgroundTransform = { x: 0, y: 0 };
 
     if (t.photoArea) {
       App.state.photoArea = {

@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const noFrameOptions = document.getElementById("noFrameOptions");
   const titleInput = document.getElementById("titleInput");
   const copyrightColor = document.getElementById("copyrightColor");
+  const backgroundEditMode = document.getElementById("backgroundEditMode");
 
   const fontSelect = document.getElementById("fontSelect");
   const fontSize = document.getElementById("fontSize");
@@ -18,6 +19,9 @@ document.addEventListener("DOMContentLoaded", () => {
   titleInput.value = App.state.texts.title.value;
   frameToggle.checked = App.state.frameEnabled !== false;
   copyrightColor.value = App.state.texts.copyright.color;
+  if (backgroundEditMode) {
+    backgroundEditMode.checked = !!App.state.backgroundEditMode;
+  }
   updateNoFrameOptions();
 
   nameInput.addEventListener("input", () => {
@@ -56,6 +60,14 @@ document.addEventListener("DOMContentLoaded", () => {
     App.render();
     App.saveLocal();
   });
+
+  if (backgroundEditMode) {
+    backgroundEditMode.addEventListener("change", () => {
+      App.state.backgroundEditMode = backgroundEditMode.checked;
+      App.renderBackground();
+      App.saveLocal();
+    });
+  }
 
   function updateNoFrameOptions() {
     noFrameOptions.style.display = frameToggle.checked ? "none" : "block";
@@ -197,6 +209,9 @@ document.addEventListener("DOMContentLoaded", () => {
     titleInput.value = App.state.texts.title.value === "TITLE" ? "" : App.state.texts.title.value;
     frameToggle.checked = App.state.frameEnabled !== false;
     copyrightColor.value = App.state.texts.copyright.color;
+    if (backgroundEditMode) {
+      backgroundEditMode.checked = !!App.state.backgroundEditMode;
+    }
     updateNoFrameOptions();
 
     document.querySelectorAll('input[name="mainJob"]').forEach(input => {

@@ -15,6 +15,7 @@
   background-position: center;
   background-repeat: no-repeat;
   z-index: 1;
+  touch-action: none;
 }
 
 /* アップロード写真エリア */
@@ -126,5 +127,24 @@
   left: 40px;
   top: 960px;
   font-size: 18px;
+  z-index: 5;
+}
+
+
+body.bg-editing #background {
+  cursor: grab;
+  z-index: 4;
+}
+
+body.bg-editing #background:active {
+  cursor: grabbing;
+}
+
+body.bg-editing #photoArea,
+body.bg-editing .draggable {
+  pointer-events: none;
+}
+
+body.bg-editing #frame {
   z-index: 5;
 }

@@ -40,6 +40,11 @@ document.addEventListener("DOMContentLoaded", () => {
       App.state.background =
         reader.result;
 
+      App.state.backgroundTransform = {
+        x: 0,
+        y: 0
+      };
+
       App.render();
       App.saveLocal();
 
@@ -100,6 +105,8 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
   function startDrag(e) {
+
+    if (App.state.backgroundEditMode) return;
 
     activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
 

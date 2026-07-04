@@ -1,6 +1,11 @@
 window.App = {
   selectedKey: "name",
   cardScale: 1,
+  backgroundImageInfo: {
+    src: "",
+    width: 0,
+    height: 0
+  },
 
   state: {
     template: "fantasy",
@@ -8,6 +13,12 @@ window.App = {
     background: "",
     frame: "",
     frameEnabled: true,
+
+    backgroundEditMode: false,
+    backgroundTransform: {
+      x: 0,
+      y: 0
+    },
 
     photo: "",
 
@@ -132,16 +143,108 @@ copyright: {
   },
 
   renderBackground() {
+    this.prepareBackgroundImageInfo();
+    this.clampBackgroundTransform();
+
+    const t = this.state.backgroundTransform || { x: 0, y: 0 };
+
     this.el.background.style.backgroundImage =
       this.state.background
         ? `url("${this.state.background}")`
         : "";
+
+    this.el.background.style.backgroundPosition =
+      `calc(50% + ${t.x}px) calc(50% + ${t.y}px)`;
+
+    document.body.classList.toggle(
+      "bg-editing",
+      !!this.state.backgroundEditMode
+    );
 
     this.el.frame.src =
       this.state.frameEnabled ? (this.state.frame || "") : "";
 
     this.el.frame.style.display =
       this.state.frameEnabled ? "block" : "none";
+  },
+
+  prepareBackgroundImageInfo() {
+    const src = this.state.background || "";
+
+    if (!src) {
+      this.backgroundImageInfo = {
+        src: "",
+        width: 0,
+        height: 0
+      };
+      return;
+    }
+
+    if (this.backgroundImageInfo.src === src) return;
+
+    this.backgroundImageInfo = {
+      src,
+      width: 0,
+      height: 0
+    };
+
+    const img = new Image();
+    img.onload = () => {
+      if (this.backgroundImageInfo.src !== src) return;
+
+      this.backgroundImageInfo.width = img.naturalWidth || img.width || 0;
+      this.backgroundImageInfo.height = img.naturalHeight || img.height || 0;
+
+      const changed = this.clampBackgroundTransform();
+      if (changed) {
+        this.renderBackground();
+        this.saveLocal();
+      }
+    };
+    img.src = src;
+  },
+
+  getBackgroundBounds() {
+    const info = this.backgroundImageInfo || {};
+    const imgW = Number(info.width || 0);
+    const imgH = Number(info.height || 0);
+
+    if (!imgW || !imgH) {
+      return null;
+    }
+
+    const cardW = 700;
+    const cardH = 1000;
+    const ratio = Math.max(cardW / imgW, cardH / imgH);
+    const renderW = imgW * ratio;
+    const renderH = imgH * ratio;
+
+    return {
+      minX: -Math.max(0, (renderW - cardW) / 2),
+      maxX: Math.max(0, (renderW - cardW) / 2),
+      minY: -Math.max(0, (renderH - cardH) / 2),
+      maxY: Math.max(0, (renderH - cardH) / 2)
+    };
+  },
+
+  clampBackgroundTransform() {
+    if (!this.state.backgroundTransform) {
+      this.state.backgroundTransform = { x: 0, y: 0 };
+    }
+
+    const bounds = this.getBackgroundBounds();
+    if (!bounds) return false;
+
+    const beforeX = Number(this.state.backgroundTransform.x || 0);
+    const beforeY = Number(this.state.backgroundTransform.y || 0);
+
+    const afterX = Math.min(bounds.maxX, Math.max(bounds.minX, beforeX));
+    const afterY = Math.min(bounds.maxY, Math.max(bounds.minY, beforeY));
+
+    this.state.backgroundTransform.x = afterX;
+    this.state.backgroundTransform.y = afterY;
+
+    return beforeX !== afterX || beforeY !== afterY;
   },
 
   renderPhotoArea() {
@@ -211,11 +314,30 @@ renderTexts() {
     };
   },
 
+  // localStorageは容量が小さいため、アップロード画像は自動保存しない。
+  // 写真・背景画像を含めた完全保存は「JSON保存」で行う。
+  getLightStateForLocalSave() {
+    return {
+      ...this.state,
+      photo: "",
+      background: ""
+    };
+  },
+
   saveLocal() {
-    localStorage.setItem(
-      "magCardState",
-      JSON.stringify(this.state)
-    );
+    try {
+      const saveData = this.getLightStateForLocalSave();
+
+      // 旧版で保存された巨大なBase64画像を消してから軽量保存する。
+      localStorage.removeItem("magCardState");
+      localStorage.setItem(
+        "magCardState",
+        JSON.stringify(saveData)
+      );
+    } catch (err) {
+      // 容量超過などでPNG保存や編集処理を止めない。
+      console.warn("localStorageへの自動保存をスキップしました", err);
+    }
   },
 
   loadLocal() {
@@ -231,6 +353,9 @@ renderTexts() {
         this.state,
         data
       );
+
+      // 旧版の巨大なlocalStorageデータを、起動時に軽量版へ置き換える。
+      this.saveLocal();
     } catch (err) {
       console.error(err);
     }

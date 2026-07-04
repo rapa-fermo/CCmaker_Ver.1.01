@@ -81,3 +81,158 @@ select {
     overflow: hidden;
   }
 }
+
+/* =========================
+   Ver25 Mobile UI
+   ========================= */
+.mobile-tabs,
+.mobile-floating-actions,
+.ios-install-hint {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  body {
+    background: #f1f5f9;
+    padding-bottom: 88px;
+  }
+
+  .container {
+    display: block;
+    min-height: 100svh;
+  }
+
+  .mobile-tabs {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    padding: 10px 12px;
+    background: rgba(241, 245, 249, 0.94);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(148, 163, 184, 0.35);
+  }
+
+  .mobile-tabs button {
+    min-height: 42px;
+    border: 1px solid #cbd5e1;
+    border-radius: 999px;
+    background: #ffffff;
+    color: #334155;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.06);
+  }
+
+  .mobile-tabs button.active {
+    background: #0f172a;
+    color: #ffffff;
+    border-color: #0f172a;
+  }
+
+  body.mobile-edit .preview {
+    display: none !important;
+  }
+
+  body.mobile-preview .panel {
+    display: none !important;
+  }
+
+  body.mobile-preview .preview {
+    display: flex !important;
+    position: static;
+    min-height: calc(100svh - 64px);
+    padding: 18px 12px 96px;
+    background: radial-gradient(circle at top, #ffffff 0, #e2e8f0 48%, #cbd5e1 100%);
+    overflow: auto;
+    align-items: flex-start;
+  }
+
+  body.mobile-preview .card-shell {
+    margin: 0 auto;
+    filter: drop-shadow(0 18px 26px rgba(15, 23, 42, 0.24));
+  }
+
+  .panel {
+    padding: 16px;
+    background: #f8fafc;
+  }
+
+  .panel h2 {
+    font-size: 20px;
+    margin: 8px 0 14px;
+  }
+
+  .notice-box,
+  .noframe-options,
+  .job-group {
+    border-radius: 14px;
+  }
+
+  .main-job-buttons label,
+  .sub-job-buttons label {
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .mobile-floating-actions {
+    position: fixed;
+    right: 14px;
+    bottom: calc(14px + env(safe-area-inset-bottom));
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-end;
+  }
+
+  .mobile-floating-actions button {
+    border: none;
+    border-radius: 999px;
+    padding: 13px 18px;
+    min-height: 48px;
+    background: #0f172a;
+    color: #ffffff;
+    font-weight: 800;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.28);
+  }
+
+  .mobile-floating-actions #installPwaButton {
+    background: #2563eb;
+  }
+
+  .panel #saveButton {
+    display: none;
+  }
+
+  .ios-install-hint {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: calc(78px + env(safe-area-inset-bottom));
+    z-index: 1002;
+    display: block;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(15, 23, 42, 0.92);
+    color: #ffffff;
+    font-size: 13px;
+    line-height: 1.5;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.26);
+  }
+
+  .ios-install-hint[hidden],
+  .mobile-floating-actions button[hidden] {
+    display: none !important;
+  }
+}
+
+@media (max-width: 420px) {
+  body.mobile-preview .preview {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+}

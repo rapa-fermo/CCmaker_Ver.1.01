@@ -6,6 +6,7 @@
   <title>Character Card Maker</title>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#3b82f6">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="CC Maker">
   <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
@@ -19,7 +20,22 @@
   <link rel="stylesheet" href="css/card.css">
 </head>
 
-<body>
+<body class="mobile-edit">
+
+<div class="mobile-tabs" aria-label="スマホ表示切替">
+  <button id="editTabButton" class="active" type="button">編集</button>
+  <button id="previewTabButton" type="button">確認</button>
+</div>
+
+<div class="mobile-floating-actions">
+  <button id="floatingSaveButton" type="button">保存 / 共有</button>
+  <button id="installPwaButton" type="button" hidden>アプリ化</button>
+</div>
+
+<div id="iosInstallHint" class="ios-install-hint" hidden>
+  iPhoneはSafariの共有ボタンから「ホーム画面に追加」を選んでください。
+</div>
+
 <div class="container">
 
   <aside class="panel">
@@ -215,6 +231,12 @@
     <label>背景画像</label>
     <input id="backgroundInput" type="file" accept="image/*">
 
+    <label class="check bg-edit-check">
+      <input id="backgroundEditMode" type="checkbox">
+      背景調整モード
+    </label>
+    <p class="hint-text">ONの間は背景だけドラッグできます。OFFに戻すと通常編集になります。</p>
+
     <hr>
 
     <label>テンプレート</label>
@@ -294,9 +316,11 @@
 <script src="templates/templates.js"></script>
 <script src="js/script.js"></script>
 <script src="js/responsive.js"></script>
+<script src="js/mobile-ui.js"></script>
 <script src="js/template.js"></script>
 <script src="js/ui.js"></script>
 <script src="js/upload.js"></script>
+<script src="js/background-drag.js"></script>
 <script src="js/drag.js"></script>
 <script src="js/export.js"></script>
 

@@ -196,3 +196,15 @@
   border-radius: 10px;
   background: #f8fafc;
 }
+
+
+.hint-text {
+  margin: 6px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #666666;
+}
+
+.bg-edit-check {
+  margin-top: 10px;
+}

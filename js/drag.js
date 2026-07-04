@@ -8,6 +8,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.querySelectorAll(".draggable").forEach(el => {
     el.addEventListener("pointerdown", e => {
+      if (App.state.backgroundEditMode) return;
+
       target = el;
       key = el.dataset.key;
 
