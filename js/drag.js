@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   let target = null;
   let key = "";
+  let activePointerId = null;
   let startX = 0;
   let startY = 0;
   let baseX = 0;
@@ -12,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       target = el;
       key = el.dataset.key;
+      activePointerId = e.pointerId;
 
       App.selectedKey = key;
 
@@ -31,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     el.addEventListener("pointermove", e => {
-      if (!target) return;
+      if (!target || e.pointerId !== activePointerId) return;
 
       const delta = App.getPointerDelta(e, startX, startY);
 
@@ -41,14 +43,29 @@ document.addEventListener("DOMContentLoaded", () => {
       App.renderTexts();
     });
 
-    el.addEventListener("pointerup", e => {
-      if (!target) return;
-
-      target.classList.remove("dragging");
-      target.releasePointerCapture(e.pointerId);
-
-      target = null;
-      App.saveLocal();
-    });
+    el.addEventListener("pointerup", stopTextDrag);
+    el.addEventListener("pointercancel", stopTextDrag);
   });
+
+  window.addEventListener("ccmaker:stop-dragging", stopTextDrag);
+
+  function stopTextDrag(e) {
+    if (!target) return;
+
+    const pointerId = e && e.pointerId;
+    if (pointerId !== undefined && pointerId !== activePointerId) return;
+
+    target.classList.remove("dragging");
+
+    if (pointerId !== undefined) {
+      try {
+        target.releasePointerCapture(pointerId);
+      } catch {}
+    }
+
+    target = null;
+    key = "";
+    activePointerId = null;
+    App.saveLocal();
+  }
 });

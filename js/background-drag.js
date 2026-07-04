@@ -56,4 +56,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
   background.addEventListener("pointerup", stopDrag);
   background.addEventListener("pointercancel", stopDrag);
+  window.addEventListener("ccmaker:stop-dragging", stopDrag);
 });

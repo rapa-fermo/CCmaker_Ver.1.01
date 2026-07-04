@@ -41,6 +41,40 @@ document.addEventListener("DOMContentLoaded", () => {
       holder.appendChild(clone);
       document.body.appendChild(holder);
 
+      // html2canvas は background-position: calc(...) を環境によって正しく反映しないため、
+      // 保存用クローンでは背景を <img> として再配置する。
+      // これにより、背景調整モードで動かした位置がPNGにそのまま反映される。
+      const cloneBackground = clone.querySelector("#background");
+      if (cloneBackground) {
+        cloneBackground.style.backgroundImage = "none";
+        cloneBackground.style.overflow = "hidden";
+
+        if (App.state.background) {
+          const bgImg = await loadImage(App.state.background);
+          const t = App.state.backgroundTransform || { x: 0, y: 0 };
+
+          const cardW = 700;
+          const cardH = 1000;
+          const ratio = Math.max(
+            cardW / bgImg.naturalWidth,
+            cardH / bgImg.naturalHeight
+          );
+
+          const w = bgImg.naturalWidth * ratio;
+          const h = bgImg.naturalHeight * ratio;
+
+          bgImg.style.position = "absolute";
+          bgImg.style.width = w + "px";
+          bgImg.style.height = h + "px";
+          bgImg.style.left = (cardW - w) / 2 + Number(t.x || 0) + "px";
+          bgImg.style.top = (cardH - h) / 2 + Number(t.y || 0) + "px";
+          bgImg.style.maxWidth = "none";
+          bgImg.style.pointerEvents = "none";
+
+          cloneBackground.appendChild(bgImg);
+        }
+      }
+
       const clonePhotoArea = clone.querySelector("#photoArea");
       if (clonePhotoArea) {
         clonePhotoArea.style.backgroundImage = "none";
@@ -71,9 +105,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
 
+      // 描画直前に1フレーム待って、スマホSafari/Chromeのレイアウト確定とメモリ解放を促す。
+      await waitForNextFrame();
+
       const canvas = await html2canvas(clone, {
         backgroundColor: null,
-        scale: 2,
+        scale: isMobileDevice() ? 1.5 : 2,
         useCORS: true,
         allowTaint: true,
         logging: false,
@@ -129,6 +166,10 @@ document.addEventListener("DOMContentLoaded", () => {
         console.warn("画像の事前読み込みに失敗しました", err);
       }))
     );
+  }
+
+  function waitForNextFrame() {
+    return new Promise(resolve => requestAnimationFrame(() => resolve()));
   }
 
   function canvasToBlob(canvas) {

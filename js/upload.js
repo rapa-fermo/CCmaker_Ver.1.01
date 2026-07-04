@@ -9,6 +9,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const photoArea =
     App.el.photoArea;
 
+  const MAX_IMAGE_BYTES = 25 * 1024 * 1024;
+  const WARN_IMAGE_BYTES = 8 * 1024 * 1024;
+  const OPTIMIZE_TRIGGER_BYTES = 2 * 1024 * 1024;
+  const MAX_LONG_EDGE = 2048;
+  const WARN_LONG_EDGE = 4096;
+  const JPEG_QUALITY = 0.9;
+
   /*=========================
     アップロード
   =========================*/
@@ -25,49 +32,50 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   }
 
-  function loadBackground(e) {
+  async function loadBackground(e) {
 
     const file =
       e.target.files[0];
 
     if (!file) return;
 
-    const reader =
-      new FileReader();
+    try {
+      const dataUrl = await optimizeImportedImage(file, "背景画像");
 
-    reader.onload = () => {
-
-      App.state.background =
-        reader.result;
+      App.state.background = dataUrl;
 
       App.state.backgroundTransform = {
         x: 0,
         y: 0
       };
 
+      App.backgroundImageInfo = {
+        src: "",
+        width: 0,
+        height: 0
+      };
+
       App.render();
       App.saveLocal();
-
-    };
-
-    reader.readAsDataURL(file);
+    } catch (err) {
+      console.error(err);
+      alert(err.message || "背景画像を読み込めませんでした");
+      e.target.value = "";
+    }
 
   }
 
-  function loadPhoto(e) {
+  async function loadPhoto(e) {
 
     const file =
       e.target.files[0];
 
     if (!file) return;
 
-    const reader =
-      new FileReader();
+    try {
+      const dataUrl = await optimizeImportedImage(file, "写真");
 
-    reader.onload = () => {
-
-      App.state.photo =
-        reader.result;
+      App.state.photo = dataUrl;
 
       App.state.photoTransform = {
         x: 0,
@@ -77,11 +85,74 @@ document.addEventListener("DOMContentLoaded", () => {
 
       App.render();
       App.saveLocal();
+    } catch (err) {
+      console.error(err);
+      alert(err.message || "写真を読み込めませんでした");
+      e.target.value = "";
+    }
 
-    };
+  }
 
-    reader.readAsDataURL(file);
+  async function optimizeImportedImage(file, label) {
+    if (!file.type || !file.type.startsWith("image/")) {
+      throw new Error(`${label}は画像ファイルを選択してください。`);
+    }
 
+    if (!/image\/(jpeg|jpg|png|webp)/i.test(file.type)) {
+      throw new Error(`${label}は JPG / PNG / WebP を使用してください。`);
+    }
+
+    if (file.size > MAX_IMAGE_BYTES) {
+      throw new Error(`${label}の容量が大きすぎます。25MB以下の画像を使用してください。`);
+    }
+
+    const originalDataUrl = await readFileAsDataURL(file);
+    const img = await loadImage(originalDataUrl);
+
+    const width = img.naturalWidth || img.width;
+    const height = img.naturalHeight || img.height;
+    const longEdge = Math.max(width, height);
+
+    if (file.size > WARN_IMAGE_BYTES || longEdge > WARN_LONG_EDGE) {
+      alert(`${label}が大きいため、スマホで安定して保存できるよう自動最適化します。`);
+    }
+
+    if (file.size <= OPTIMIZE_TRIGGER_BYTES && longEdge <= MAX_LONG_EDGE) {
+      return originalDataUrl;
+    }
+
+    const scale = Math.min(1, MAX_LONG_EDGE / longEdge);
+    const targetW = Math.max(1, Math.round(width * scale));
+    const targetH = Math.max(1, Math.round(height * scale));
+
+    const canvas = document.createElement("canvas");
+    canvas.width = targetW;
+    canvas.height = targetH;
+
+    const ctx = canvas.getContext("2d", { alpha: false });
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, targetW, targetH);
+    ctx.drawImage(img, 0, 0, targetW, targetH);
+
+    return canvas.toDataURL("image/jpeg", JPEG_QUALITY);
+  }
+
+  function readFileAsDataURL(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function loadImage(src) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = reject;
+      img.src = src;
+    });
   }
 
   /*=========================
@@ -177,26 +248,30 @@ document.addEventListener("DOMContentLoaded", () => {
     stopDrag
   );
 
+  window.addEventListener("ccmaker:stop-dragging", stopDrag);
+
   function stopDrag(e) {
 
-    activePointers.delete(e.pointerId);
+    const pointerId = e && e.pointerId;
+
+    if (pointerId !== undefined) {
+      activePointers.delete(pointerId);
+    } else {
+      activePointers.clear();
+    }
 
     if (!dragging && activePointers.size === 0) {
       App.saveLocal();
       return;
     }
 
-    if (!dragging) return;
-
     dragging = false;
 
-    try {
-
-      photoArea.releasePointerCapture(
-        e.pointerId
-      );
-
-    } catch {}
+    if (pointerId !== undefined) {
+      try {
+        photoArea.releasePointerCapture(pointerId);
+      } catch {}
+    }
 
     App.saveLocal();
 
