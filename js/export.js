@@ -75,34 +75,17 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
 
+      // V28: 写真は保存時に再計算しない。
+      // プレビューDOMの #photoArea は App.renderPhoto() により
+      // background-size / background-position がすでに反映されているため、
+      // その表示状態をそのままクローンしてhtml2canvasに渡す。
+      // 縦長画像で保存時だけ下にズレる問題は、旧処理の再計算が原因だったため廃止する。
       const clonePhotoArea = clone.querySelector("#photoArea");
-      if (clonePhotoArea) {
-        clonePhotoArea.style.backgroundImage = "none";
-
-        if (App.state.photo) {
-          const img = await loadImage(App.state.photo);
-
-          const area = App.state.photoArea;
-          const p = App.state.photoTransform;
-
-          const ratio = Math.min(
-            area.width / img.naturalWidth,
-            area.height / img.naturalHeight
-          );
-
-          const w = img.naturalWidth * ratio * p.scale;
-          const h = img.naturalHeight * ratio * p.scale;
-
-          img.style.position = "absolute";
-          img.style.width = w + "px";
-          img.style.height = h + "px";
-          img.style.left = (area.width - w) / 2 + p.x + "px";
-          img.style.top = (area.height - h) / 2 + p.y + "px";
-          img.style.maxWidth = "none";
-          img.style.pointerEvents = "none";
-
-          clonePhotoArea.appendChild(img);
-        }
+      if (clonePhotoArea && App.el && App.el.photoArea) {
+        clonePhotoArea.style.backgroundImage = App.el.photoArea.style.backgroundImage;
+        clonePhotoArea.style.backgroundSize = App.el.photoArea.style.backgroundSize;
+        clonePhotoArea.style.backgroundPosition = App.el.photoArea.style.backgroundPosition;
+        clonePhotoArea.style.backgroundRepeat = App.el.photoArea.style.backgroundRepeat;
       }
 
       // 描画直前に1フレーム待って、スマホSafari/Chromeのレイアウト確定とメモリ解放を促す。

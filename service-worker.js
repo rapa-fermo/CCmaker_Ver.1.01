@@ -1,4 +1,4 @@
-const CACHE_NAME = "ccmaker-v27-stability";
+const CACHE_NAME = "ccmaker-v28-photo-export-position-fixed";
 
 const APP_FILES = [
   "./",
