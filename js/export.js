@@ -75,17 +75,40 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
 
-      // V28: 写真は保存時に再計算しない。
-      // プレビューDOMの #photoArea は App.renderPhoto() により
-      // background-size / background-position がすでに反映されているため、
-      // その表示状態をそのままクローンしてhtml2canvasに渡す。
-      // 縦長画像で保存時だけ下にズレる問題は、旧処理の再計算が原因だったため廃止する。
+      // V29: 写真はCSS backgroundのままでは、縦長画像＋calc(background-position)で
+      // 一部ブラウザのhtml2canvasが失敗することがある。
+      // 保存用クローンでは、プレビューと同じ計算式で <img> として再配置する。
+      // プレビュー仕様: background-size: `${100 * scale}% auto`
+      // つまり「写真エリア幅に合わせる」ため、縦長画像でも上下位置が一致する。
       const clonePhotoArea = clone.querySelector("#photoArea");
-      if (clonePhotoArea && App.el && App.el.photoArea) {
-        clonePhotoArea.style.backgroundImage = App.el.photoArea.style.backgroundImage;
-        clonePhotoArea.style.backgroundSize = App.el.photoArea.style.backgroundSize;
-        clonePhotoArea.style.backgroundPosition = App.el.photoArea.style.backgroundPosition;
-        clonePhotoArea.style.backgroundRepeat = App.el.photoArea.style.backgroundRepeat;
+      if (clonePhotoArea) {
+        clonePhotoArea.style.backgroundImage = "none";
+        clonePhotoArea.style.overflow = "hidden";
+
+        if (App.state.photo) {
+          const photoImg = await loadImage(App.state.photo);
+          const area = App.state.photoArea || { left: 0, top: 0, width: 700, height: 1000 };
+          const p = App.state.photoTransform || { x: 0, y: 0, scale: 1 };
+
+          const areaW = Number(area.width || 700);
+          const areaH = Number(area.height || 1000);
+          const scale = Number(p.scale || 1);
+
+          const baseRatio = areaW / photoImg.naturalWidth;
+          const w = photoImg.naturalWidth * baseRatio * scale;
+          const h = photoImg.naturalHeight * baseRatio * scale;
+
+          photoImg.style.position = "absolute";
+          photoImg.style.width = w + "px";
+          photoImg.style.height = h + "px";
+          photoImg.style.left = ((areaW - w) / 2 + Number(p.x || 0)) + "px";
+          photoImg.style.top = ((areaH - h) / 2 + Number(p.y || 0)) + "px";
+          photoImg.style.maxWidth = "none";
+          photoImg.style.maxHeight = "none";
+          photoImg.style.pointerEvents = "none";
+
+          clonePhotoArea.appendChild(photoImg);
+        }
       }
 
       // 描画直前に1フレーム待って、スマホSafari/Chromeのレイアウト確定とメモリ解放を促す。
