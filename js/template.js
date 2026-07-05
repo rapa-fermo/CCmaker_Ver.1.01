@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
       };
     }
 
-    ["title", "name", "job", "subjob", "desc", "copyright"].forEach(textKey => {
+    ["title", "name", "job", "subjob", "desc", "world", "copyright"].forEach(textKey => {
       if (t.font) {
         App.state.texts[textKey].font = t.font;
       }

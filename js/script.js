@@ -39,7 +39,7 @@ window.App = {
 title: {
   value: "TITLE",
   x: 45,
-  y: 40,
+  y: 70,
   size: 54,
   color: "#ffffff",
   font: "Cinzel",
@@ -49,9 +49,9 @@ title: {
 
 name: {
   value: "名前",
-  x: 40,
-  y: 740,
-  size: 68,
+  x: 150,
+  y: 575,
+  size: 64,
   color: "#ffffff",
   font: "Noto Sans JP",
   bold: true,
@@ -60,9 +60,9 @@ name: {
 
 job: {
   value: "メインジョブ",
-  x: 45,
-  y: 820,
-  size: 32,
+  x: 150,
+  y: 665,
+  size: 30,
   color: "#ffffff",
   font: "Noto Sans JP",
   bold: false,
@@ -71,9 +71,9 @@ job: {
 
 subjob: {
   value: "サブジョブ",
-  x: 45,
-  y: 860,
-  size: 16,
+  x: 150,
+  y: 705,
+  size: 18,
   color: "#ffffff",
   font: "Noto Sans JP",
   bold: false,
@@ -82,8 +82,8 @@ subjob: {
 
 desc: {
   value: "自己アピール",
-  x: 45,
-  y: 850,
+  x: 180,
+  y: 845,
   size: 22,
   color: "#ffffff",
   font: "Noto Sans JP",
@@ -93,9 +93,9 @@ desc: {
 
 world: {
   value: "活動ワールド",
-  x: 45,
-  y: 930,
-  size: 24,
+  x: 470,
+  y: 665,
+  size: 22,
   color: "#ffffff",
   font: "Noto Sans JP",
   bold: true,
@@ -104,9 +104,9 @@ world: {
 
 copyright: {
   value: "© SQUARE ENIX",
-  x: 40,
-  y: 960,
-  size: 18,
+  x: 470,
+  y: 940,
+  size: 16,
   color: "#ffffff",
   font: "Noto Sans JP",
   bold: false,

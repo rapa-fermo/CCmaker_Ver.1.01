@@ -70,30 +70,30 @@
 
 /* 名前 */
 #nameText {
-  left: 40px;
-  top: 780px;
-  font-size: 68px;
+  left: 150px;
+  top: 575px;
+  font-size: 64px;
   font-weight: bold;
 }
 
 /* 職業 */
 #jobText {
-  left: 45px;
-  top: 865px;
-  font-size: 32px;
+  left: 150px;
+  top: 665px;
+  font-size: 30px;
 }
 
 #subjobText {
-  left: 45px;
-  top: 905px;
-  font-size: 22px;
+  left: 150px;
+  top: 705px;
+  font-size: 18px;
 }
 
 /* 自己アピール */
 #descText {
-  left: 45px;
-  top: 850px;
-  width: 610px;
+  left: 180px;
+  top: 845px;
+  width: 420px;
   font-size: 22px;
   line-height: 1.5;
 }
@@ -108,25 +108,25 @@
 
 #titleText {
   left: 45px;
-  top: 40px;
+  top: 70px;
   font-size: 54px;
   font-weight: bold;
   letter-spacing: .04em;
 }
 
 #worldText {
-  left: 45px;
-  top: 930px;
-  width: 610px;
-  font-size: 24px;
+  left: 470px;
+  top: 665px;
+  width: 190px;
+  font-size: 22px;
   font-weight: bold;
   line-height: 1.4;
 }
 
 #copyrightText {
-  left: 40px;
-  top: 960px;
-  font-size: 18px;
+  left: 470px;
+  top: 940px;
+  font-size: 16px;
   z-index: 5;
 }
 
