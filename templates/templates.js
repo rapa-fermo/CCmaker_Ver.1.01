@@ -96,7 +96,8 @@ window.templates = {
       bindingShadow: true,
       backgroundOpacity: 22,
       backgroundMode: "full",
-      magazineTitlePreset: "CHARACTER FILE"
+      magazineTitlePreset: "CHARACTER FILE",
+      theme: "parchment"
     },
     photoArea: { left: 90, top: 120, width: 790, height: 840 },
     texts: {

@@ -152,8 +152,7 @@ body.bg-editing #frame {
 /* v31: 横長・雑誌見開きテンプレート */
 #card.layout-magazine {
   background:
-    radial-gradient(circle at 25% 20%, rgba(255,255,255,.55), rgba(255,255,255,0) 36%),
-    linear-gradient(90deg, #f5ead8 0%, #fff8ed 49%, #eadcc9 50%, #fff8ed 51%, #f4e6d3 100%);
+    var(--spread-bg, radial-gradient(circle at 25% 20%, rgba(255,255,255,.55), rgba(255,255,255,0) 36%), linear-gradient(90deg, #f5ead8 0%, #fff8ed 49%, #eadcc9 50%, #fff8ed 51%, #f4e6d3 100%));
 }
 
 #card.layout-magazine::before {
@@ -400,7 +399,7 @@ body.bg-editing #frame {
   left: 50%;
   width: 2px;
   transform: translateX(-50%);
-  background: rgba(92,64,42,.32);
+  background: var(--spread-line, rgba(92,64,42,.32));
   box-shadow:
     -10px 0 18px rgba(80,55,35,.16),
     10px 0 18px rgba(255,255,255,.22);
@@ -409,6 +408,7 @@ body.bg-editing #frame {
 
 #card.layout-magazine #background {
   transition: opacity .15s ease;
+  mix-blend-mode: multiply;
 }
 
 

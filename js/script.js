@@ -7,6 +7,76 @@ window.App = {
     height: 0
   },
 
+  spreadThemes: {
+    parchment: {
+      name: "Adventure Record",
+      background: "radial-gradient(circle at 24% 18%, rgba(255,255,255,.62), rgba(255,255,255,0) 38%), linear-gradient(90deg, #ead8bd 0%, #fff7e8 49%, #dec9aa 50%, #fff6e6 51%, #ead5b7 100%)",
+      primary: "#2b2118",
+      accent: "#7a4f32",
+      muted: "#6d5c4f",
+      line: "#7a4f32",
+      shadow: "rgba(80,55,35,.22)"
+    },
+    midnight: {
+      name: "Arcane Archive",
+      background: "radial-gradient(circle at 20% 18%, rgba(110,132,180,.32), rgba(255,255,255,0) 36%), linear-gradient(90deg, #10192a 0%, #1d2a42 49%, #0b1020 50%, #1f2d47 51%, #121b2e 100%)",
+      primary: "#f3dfaa",
+      accent: "#d4af5f",
+      muted: "#b9a27a",
+      line: "#d4af5f",
+      shadow: "rgba(0,0,0,.35)"
+    },
+    forest: {
+      name: "Botanist Notes",
+      background: "radial-gradient(circle at 22% 18%, rgba(214,233,190,.35), rgba(255,255,255,0) 37%), linear-gradient(90deg, #203829 0%, #dbe5cf 49%, #39523d 50%, #e8efdd 51%, #243b2c 100%)",
+      primary: "#173020",
+      accent: "#4f7a43",
+      muted: "#49604a",
+      line: "#6f945c",
+      shadow: "rgba(20,45,25,.24)"
+    },
+    crimson: {
+      name: "Knight Chronicle",
+      background: "radial-gradient(circle at 25% 20%, rgba(255,232,205,.32), rgba(255,255,255,0) 38%), linear-gradient(90deg, #4b1421 0%, #f1dfcf 49%, #6f2130 50%, #f7e7d8 51%, #4b1421 100%)",
+      primary: "#3a1515",
+      accent: "#9a3340",
+      muted: "#7a504c",
+      line: "#9a3340",
+      shadow: "rgba(80,20,30,.26)"
+    },
+    obsidian: {
+      name: "Engineering File",
+      background: "radial-gradient(circle at 18% 18%, rgba(255,255,255,.20), rgba(255,255,255,0) 34%), linear-gradient(90deg, #17191d 0%, #2d3036 49%, #090a0d 50%, #30333a 51%, #15171b 100%)",
+      primary: "#e5e7eb",
+      accent: "#a8b0bd",
+      muted: "#bfc5cf",
+      line: "#9aa3b2",
+      shadow: "rgba(0,0,0,.45)"
+    },
+    silver: {
+      name: "Encyclopedia",
+      background: "radial-gradient(circle at 24% 20%, rgba(255,255,255,.8), rgba(255,255,255,0) 42%), linear-gradient(90deg, #d8dde4 0%, #f8fafc 49%, #c2c8d0 50%, #ffffff 51%, #dfe4eb 100%)",
+      primary: "#1f2937",
+      accent: "#5f6f82",
+      muted: "#667085",
+      line: "#8a96a6",
+      shadow: "rgba(30,40,55,.18)"
+    }
+  },
+
+  getSpreadTheme(key) {
+    return this.spreadThemes[key] || this.spreadThemes.parchment;
+  },
+
+  applySpreadThemeColors(themeKey) {
+    const theme = this.getSpreadTheme(themeKey);
+    const set = (key, color) => { if (this.state.texts[key]) this.state.texts[key].color = color; };
+    ["title", "jobLabel", "job", "subjobLabel", "activityLabel", "world", "gathererLabel", "crafterLabel"].forEach(k => set(k, theme.accent));
+    ["name", "desc"].forEach(k => set(k, theme.primary));
+    ["subjob", "gatherer", "crafter"].forEach(k => set(k, theme.primary));
+    set("copyright", theme.muted);
+  },
+
   state: {
     template: "fantasy",
     layout: "portrait",
@@ -51,7 +121,8 @@ window.App = {
       bindingShadow: true,
       backgroundOpacity: 22,
       backgroundMode: "full",
-      magazineTitlePreset: "CHARACTER FILE"
+      magazineTitlePreset: "CHARACTER FILE",
+      theme: "parchment"
     },
 
     activity: {
@@ -280,6 +351,19 @@ copyright: {
     this.el.card.style.height = size.height + "px";
     this.el.card.dataset.layout = layout;
     this.el.card.classList.toggle("layout-magazine", layout === "magazine");
+
+    if (layout === "magazine") {
+      const theme = this.getSpreadTheme((this.state.spread || {}).theme);
+      this.el.card.dataset.spreadTheme = (this.state.spread || {}).theme || "parchment";
+      this.el.card.style.setProperty("--spread-bg", theme.background);
+      this.el.card.style.setProperty("--spread-primary", theme.primary);
+      this.el.card.style.setProperty("--spread-accent", theme.accent);
+      this.el.card.style.setProperty("--spread-muted", theme.muted);
+      this.el.card.style.setProperty("--spread-line", theme.line);
+      this.el.card.style.setProperty("--spread-shadow", theme.shadow);
+    } else {
+      this.el.card.dataset.spreadTheme = "";
+    }
   },
 
   renderBackground() {
@@ -414,14 +498,18 @@ copyright: {
     const isMagazine = (this.state.layout || "portrait") === "magazine";
     const spread = this.state.spread || {};
 
+    const theme = this.getSpreadTheme(spread.theme);
+
     if (this.el.bindingLine) {
       this.el.bindingLine.style.display =
         isMagazine && spread.bindingLine !== false ? "block" : "none";
+      this.el.bindingLine.style.background = theme.line;
     }
 
     if (this.el.bindingShadow) {
       this.el.bindingShadow.style.display =
         isMagazine && spread.bindingShadow !== false ? "block" : "none";
+      this.el.bindingShadow.style.background = `linear-gradient(90deg, rgba(255,255,255,0), ${theme.shadow}, rgba(0,0,0,.20), rgba(255,255,255,.22), rgba(255,255,255,0))`;
     }
 
     document.body.classList.toggle("is-spread-card", isMagazine);
@@ -639,6 +727,7 @@ renderJobGuideLines(showSubjob = true, showGatherer = false, showCrafter = false
       localStorage.removeItem("magCardState_v31_job_group_cover_adjust");
       localStorage.removeItem("magCardState_v31_1_cover_job_lines");
       localStorage.removeItem("magCardState_v31_2_spread_options");
+      localStorage.removeItem("magCardState_v31_4_1_mobile_edit_fix");
       localStorage.setItem(
         "magCardState_v31_3_gather_craft",
         JSON.stringify(saveData)

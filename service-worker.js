@@ -1,4 +1,4 @@
-const CACHE_NAME = "ccmaker-v31_4_user_guide";
+const CACHE_NAME = "ccmaker-v31_5_magazine_theme";
 
 const APP_FILES = [
   "./",

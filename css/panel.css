@@ -252,3 +252,95 @@
 #magazineTitleCustom {
   margin-top: 8px;
 }
+
+/* v31.4.1: mobile fix for checkbox/radio option grids */
+.panel input[type="checkbox"],
+.panel input[type="radio"] {
+  width: auto;
+  min-width: 0;
+  min-height: 0;
+  flex: 0 0 auto;
+}
+
+.spread-job-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 8px 0 16px;
+}
+
+.spread-job-options label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  min-height: 38px;
+  margin: 0;
+  padding: 8px 10px;
+  border: 1px solid #dccbb8;
+  border-radius: 999px;
+  background: rgba(255,255,255,.72);
+  font-size: 13px;
+  line-height: 1.2;
+  font-weight: 700;
+  white-space: nowrap;
+  writing-mode: horizontal-tb;
+  word-break: keep-all;
+  overflow-wrap: normal;
+  cursor: pointer;
+}
+
+.spread-job-options label:has(input:checked) {
+  background: #7a4f32;
+  color: #fff;
+  border-color: #7a4f32;
+}
+
+@media (max-width: 768px) {
+  .panel input[type="checkbox"],
+  .panel input[type="radio"] {
+    width: 18px !important;
+    height: 18px !important;
+    min-width: 18px !important;
+    min-height: 18px !important;
+    max-width: 18px !important;
+    flex: 0 0 18px;
+    box-sizing: border-box;
+  }
+
+  .panel .check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    line-height: 1.4;
+  }
+
+  .spread-options {
+    padding: 12px;
+    overflow: hidden;
+  }
+
+  .spread-job-options {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .spread-job-options label {
+    width: 100%;
+    box-sizing: border-box;
+    justify-content: flex-start;
+    font-size: 15px;
+    min-height: 44px;
+    padding: 10px 12px;
+  }
+
+  .main-job-buttons input,
+  .sub-job-buttons input {
+    display: none !important;
+  }
+}
+
+/* v31.5: Magazine Theme selector */
+#spreadThemeSelect {
+  font-weight: 700;
+}

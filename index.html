@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Character Card Maker v31.2</title>
+  <title>Character Card Maker v31.5</title>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#3b82f6">
   <meta name="mobile-web-app-capable" content="yes">
@@ -341,6 +341,17 @@
     </div>
 
     <div id="spreadOptions" class="spread-options" hidden>
+      <label>Magazine Theme（見開きテーマ）</label>
+      <select id="spreadThemeSelect">
+        <option value="parchment">📖 Adventure Record / 羊皮紙</option>
+        <option value="midnight">🌙 Arcane Archive / Midnight</option>
+        <option value="forest">🌿 Botanist Notes / Forest</option>
+        <option value="crimson">🛡 Knight Chronicle / Crimson</option>
+        <option value="obsidian">⚙ Engineering File / Obsidian</option>
+        <option value="silver">📚 Encyclopedia / Silver</option>
+      </select>
+      <p class="hint-text">見開き背景の下地色と、文字・ライン色をまとめて変更します。</p>
+
       <label>雑誌タイトル</label>
       <select id="magazineTitlePreset">
         <option value="CHARACTER FILE">CHARACTER FILE</option>

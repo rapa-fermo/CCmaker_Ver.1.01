@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const frameOptions = document.getElementById("frameOptions");
   const noFrameOptions = document.getElementById("noFrameOptions");
   const spreadOptions = document.getElementById("spreadOptions");
+  const spreadThemeSelect = document.getElementById("spreadThemeSelect");
   const magazineTitlePreset = document.getElementById("magazineTitlePreset");
   const magazineTitleCustom = document.getElementById("magazineTitleCustom");
   const spreadBindingLineToggle = document.getElementById("spreadBindingLineToggle");
@@ -135,7 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  [spreadBindingLineToggle, spreadBindingShadowToggle, spreadBgOpacity, spreadBgMode].forEach(el => {
+  [spreadThemeSelect, spreadBindingLineToggle, spreadBindingShadowToggle, spreadBgOpacity, spreadBgMode].forEach(el => {
     if (!el) return;
     el.addEventListener("input", updateSpreadStateFromControls);
     el.addEventListener("change", updateSpreadStateFromControls);
@@ -238,6 +239,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const spread = App.state.spread || {};
     const preset = spread.magazineTitlePreset || matchMagazinePreset(App.state.texts.title.value);
 
+    if (spreadThemeSelect) spreadThemeSelect.value = spread.theme || "parchment";
     if (magazineTitlePreset) magazineTitlePreset.value = preset;
     if (magazineTitleCustom) {
       magazineTitleCustom.hidden = preset !== "custom";
@@ -268,6 +270,11 @@ document.addEventListener("DOMContentLoaded", () => {
     App.state.spread.bindingShadow = spreadBindingShadowToggle ? spreadBindingShadowToggle.checked : true;
     App.state.spread.backgroundOpacity = spreadBgOpacity ? Number(spreadBgOpacity.value) : 22;
     App.state.spread.backgroundMode = spreadBgMode ? spreadBgMode.value : "full";
+    const beforeTheme = App.state.spread.theme || "parchment";
+    App.state.spread.theme = spreadThemeSelect ? spreadThemeSelect.value : beforeTheme;
+    if (App.state.spread.theme !== beforeTheme && typeof App.applySpreadThemeColors === "function") {
+      App.applySpreadThemeColors(App.state.spread.theme);
+    }
     if (spreadBgOpacityLabel) spreadBgOpacityLabel.textContent = App.state.spread.backgroundOpacity + "%";
 
     App.render();
