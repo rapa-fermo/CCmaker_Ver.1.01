@@ -1,13 +1,13 @@
 {
-  "name": "Character Card Maker",
+  "name": "Character Card Maker v31",
   "short_name": "CC Maker",
-  "description": "FFXIV character card maker",
+  "description": "FFXIV character card maker with magazine spread template",
   "start_url": "./?source=pwa",
   "scope": "./",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#3b82f6",
-  "orientation": "portrait",
+  "orientation": "any",
   "icons": [
     {
       "src": "assets/icons/icon-192.png",

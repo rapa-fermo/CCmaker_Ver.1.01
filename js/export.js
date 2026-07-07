@@ -19,10 +19,14 @@ document.addEventListener("DOMContentLoaded", () => {
       // スマホで失敗することがあるため、使用中画像を先に読み込む
       await preloadExportImages();
 
+      const size = App.getCardSize ? App.getCardSize() : { width: 700, height: 1000 };
+      const cardW = size.width;
+      const cardH = size.height;
+
       const clone = App.el.card.cloneNode(true);
 
-      clone.style.width = "700px";
-      clone.style.height = "1000px";
+      clone.style.width = cardW + "px";
+      clone.style.height = cardH + "px";
       clone.style.transform = "none";
       clone.style.margin = "0";
 
@@ -32,8 +36,8 @@ document.addEventListener("DOMContentLoaded", () => {
       holder.style.position = "fixed";
       holder.style.left = "0";
       holder.style.top = "0";
-      holder.style.width = "700px";
-      holder.style.height = "1000px";
+      holder.style.width = cardW + "px";
+      holder.style.height = cardH + "px";
       holder.style.overflow = "hidden";
       holder.style.opacity = "0";
       holder.style.pointerEvents = "none";
@@ -53,11 +57,21 @@ document.addEventListener("DOMContentLoaded", () => {
           const bgImg = await loadImage(App.state.background);
           const t = App.state.backgroundTransform || { x: 0, y: 0 };
 
-          const cardW = 700;
-          const cardH = 1000;
+          const spread = App.state.spread || {};
+          const mode = (App.state.layout || "portrait") === "magazine"
+            ? (spread.backgroundMode || "full")
+            : "full";
+          const bgBoxW = mode === "left" || mode === "right" ? cardW / 2 : cardW;
+          const bgBoxH = cardH;
+
+          cloneBackground.style.left = mode === "right" ? "50%" : "0";
+          cloneBackground.style.width = bgBoxW + "px";
+          cloneBackground.style.height = bgBoxH + "px";
+          cloneBackground.style.right = "auto";
+
           const ratio = Math.max(
-            cardW / bgImg.naturalWidth,
-            cardH / bgImg.naturalHeight
+            bgBoxW / bgImg.naturalWidth,
+            bgBoxH / bgImg.naturalHeight
           );
 
           const w = bgImg.naturalWidth * ratio;
@@ -66,8 +80,8 @@ document.addEventListener("DOMContentLoaded", () => {
           bgImg.style.position = "absolute";
           bgImg.style.width = w + "px";
           bgImg.style.height = h + "px";
-          bgImg.style.left = (cardW - w) / 2 + Number(t.x || 0) + "px";
-          bgImg.style.top = (cardH - h) / 2 + Number(t.y || 0) + "px";
+          bgImg.style.left = (bgBoxW - w) / 2 + Number(t.x || 0) + "px";
+          bgImg.style.top = (bgBoxH - h) / 2 + Number(t.y || 0) + "px";
           bgImg.style.maxWidth = "none";
           bgImg.style.pointerEvents = "none";
 
@@ -87,7 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (App.state.photo) {
           const photoImg = await loadImage(App.state.photo);
-          const area = App.state.photoArea || { left: 0, top: 0, width: 700, height: 1000 };
+          const area = App.state.photoArea || { left: 0, top: 0, width: cardW, height: cardH };
           const p = App.state.photoTransform || { x: 0, y: 0, scale: 1 };
 
           const areaW = Number(area.width || 700);

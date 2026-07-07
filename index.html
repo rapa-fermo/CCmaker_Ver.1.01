@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Character Card Maker</title>
+  <title>Character Card Maker v31.2</title>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#3b82f6">
   <meta name="mobile-web-app-capable" content="yes">
@@ -54,6 +54,21 @@
     <input id="nameInput" type="text" placeholder="名前">
 
 <label>メインジョブ</label>
+
+<div class="job-group">
+  <div class="job-title">初期ジョブ</div>
+  <div class="main-job-buttons">
+    <label><input type="radio" name="mainJob" value="剣術士">剣術士</label>
+    <label><input type="radio" name="mainJob" value="斧術士">斧術士</label>
+    <label><input type="radio" name="mainJob" value="格闘士">格闘士</label>
+    <label><input type="radio" name="mainJob" value="槍術士">槍術士</label>
+    <label><input type="radio" name="mainJob" value="弓術士">弓術士</label>
+    <label><input type="radio" name="mainJob" value="呪術士">呪術士</label>
+    <label><input type="radio" name="mainJob" value="巴術士">巴術士</label>
+    <label><input type="radio" name="mainJob" value="幻術士">幻術士</label>
+    <label><input type="radio" name="mainJob" value="双剣士">双剣士</label>
+  </div>
+</div>
 
 <div class="job-group">
   <div class="job-title">ファイター</div>
@@ -110,6 +125,28 @@
 
 <label>サブジョブ</label>
 
+<label class="check">
+  <input id="subjobToggle" type="checkbox" checked>
+  サブジョブ欄を表示する
+</label>
+
+<div id="subJobOptions">
+
+<div class="job-group">
+  <div class="job-title">初期ジョブ</div>
+  <div class="sub-job-buttons">
+    <label><input type="checkbox" value="剣術士">剣術士</label>
+    <label><input type="checkbox" value="斧術士">斧術士</label>
+    <label><input type="checkbox" value="格闘士">格闘士</label>
+    <label><input type="checkbox" value="槍術士">槍術士</label>
+    <label><input type="checkbox" value="弓術士">弓術士</label>
+    <label><input type="checkbox" value="呪術士">呪術士</label>
+    <label><input type="checkbox" value="巴術士">巴術士</label>
+    <label><input type="checkbox" value="幻術士">幻術士</label>
+    <label><input type="checkbox" value="双剣士">双剣士</label>
+  </div>
+</div>
+
 <div class="job-group">
   <div class="job-title">ファイター</div>
   <div class="sub-job-buttons">
@@ -160,6 +197,37 @@
     <label><input type="checkbox" value="ピクトマンサー">ピクトマンサー</label>
   </div>
 </div>
+
+</div>
+
+    <label>ジョブ見出し</label>
+    <select id="headingLanguageSelect">
+      <option value="kana">カタカナ</option>
+      <option value="en">English</option>
+    </select>
+
+    <label class="check">
+      <input id="jobGuideLineToggle" type="checkbox" checked>
+      見出し下ラインを表示する
+    </label>
+
+    <label>活動時間</label>
+    <label class="check">
+      <input id="activityToggle" type="checkbox" checked>
+      活動時間スケールバーを表示する
+    </label>
+    <div class="activity-controls">
+      <div>
+        <label for="activityStart">開始</label>
+        <input id="activityStart" type="range" min="0" max="24" step="1" value="21">
+        <span id="activityStartLabel">21:00</span>
+      </div>
+      <div>
+        <label for="activityEnd">終了</label>
+        <input id="activityEnd" type="range" min="0" max="24" step="1" value="24">
+        <span id="activityEndLabel">24:00</span>
+      </div>
+    </div>
 
     <label>自己アピール</label>
     <textarea id="descInput" placeholder="自己アピール"></textarea>
@@ -239,25 +307,93 @@
 
     <hr>
 
+    <label>カードタイプ</label>
+    <select id="cardTypeSelect"></select>
+
     <label>テンプレート</label>
     <select id="templateSelect"></select>
 
-    <label class="check">
-      <input id="frameToggle" type="checkbox" checked>
-      フレームを使用する
-    </label>
+    <div id="frameOptions">
+      <label class="check">
+        <input id="frameToggle" type="checkbox" checked>
+        フレームを使用する
+      </label>
 
-    <div id="noFrameOptions" class="noframe-options">
-      <label>タイトル</label>
-      <input id="titleInput" type="text" placeholder="タイトル">
+      <div id="noFrameOptions" class="noframe-options">
+        <label>タイトル</label>
+        <input id="titleInput" type="text" placeholder="タイトル">
 
-      <label>コピーライト色</label>
-      <input id="copyrightColor" type="color" value="#ffffff">
+        <label>コピーライト色</label>
+        <input id="copyrightColor" type="color" value="#ffffff">
+      </div>
+    </div>
+
+    <div id="spreadOptions" class="spread-options" hidden>
+      <label>雑誌タイトル</label>
+      <select id="magazineTitlePreset">
+        <option value="CHARACTER FILE">CHARACTER FILE</option>
+        <option value="CHARACTER PROFILE">CHARACTER PROFILE</option>
+        <option value="ADVENTURER'S RECORD">ADVENTURER'S RECORD</option>
+        <option value="WORLD RESIDENT FILE">WORLD RESIDENT FILE</option>
+        <option value="custom">自由入力</option>
+      </select>
+      <input id="magazineTitleCustom" type="text" placeholder="自由入力タイトル" hidden>
+
+      <label class="check">
+        <input id="spreadBindingLineToggle" type="checkbox" checked>
+        中央綴じラインを表示する
+      </label>
+
+      <label class="check">
+        <input id="spreadBindingShadowToggle" type="checkbox" checked>
+        綴じ影を表示する
+      </label>
+
+      <label>見開き背景の透過率</label>
+      <input id="spreadBgOpacity" type="range" min="0" max="100" value="22">
+      <p class="hint-text">現在: <span id="spreadBgOpacityLabel">22%</span></p>
+
+      <label>背景画像の表示範囲</label>
+      <select id="spreadBgMode">
+        <option value="full">全面</option>
+        <option value="left">左ページのみ</option>
+        <option value="right">右ページのみ</option>
+      </select>
+
+      <hr>
+
+      <label>見開き専用：ギャザラー</label>
+      <label class="check">
+        <input id="gathererToggle" type="checkbox" checked>
+        ギャザラー欄を表示する
+      </label>
+      <div id="gathererOptions" class="spread-job-options">
+        <label><input type="checkbox" class="gatherer-job" value="採掘師">採掘師</label>
+        <label><input type="checkbox" class="gatherer-job" value="園芸師">園芸師</label>
+        <label><input type="checkbox" class="gatherer-job" value="漁師">漁師</label>
+      </div>
+
+      <label>見開き専用：クラフター</label>
+      <label class="check">
+        <input id="crafterToggle" type="checkbox" checked>
+        クラフター欄を表示する
+      </label>
+      <div id="crafterOptions" class="spread-job-options">
+        <label><input type="checkbox" class="crafter-job" value="木工師">木工師</label>
+        <label><input type="checkbox" class="crafter-job" value="鍛冶師">鍛冶師</label>
+        <label><input type="checkbox" class="crafter-job" value="甲冑師">甲冑師</label>
+        <label><input type="checkbox" class="crafter-job" value="彫金師">彫金師</label>
+        <label><input type="checkbox" class="crafter-job" value="革細工師">革細工師</label>
+        <label><input type="checkbox" class="crafter-job" value="裁縫師">裁縫師</label>
+        <label><input type="checkbox" class="crafter-job" value="錬金術師">錬金術師</label>
+        <label><input type="checkbox" class="crafter-job" value="調理師">調理師</label>
+      </div>
     </div>
 
     <hr>
 
     <label>フォント</label>
+    <p class="hint-text">ジョブ見出しとジョブ内容は一緒にドラッグできます。サイズ・色・太字はクリックした文字ごとに個別変更できます。</p>
     <select id="fontSelect">
       <option value="Noto Sans JP">Noto Sans JP</option>
       <option value="Cinzel">Cinzel</option>
@@ -292,6 +428,8 @@
   <div id="card">
 
     <div id="background"></div>
+    <div id="bindingShadow"></div>
+    <div id="bindingLine"></div>
 
     <div id="photoArea"></div>
 
@@ -299,10 +437,26 @@
 
     <div id="titleText" class="draggable" data-key="title">TITLE</div>
     <div id="nameText" class="draggable" data-key="name">名前</div>
+    <div id="jobLabelText" class="draggable" data-key="jobLabel">メインジョブ</div>
+    <div id="jobLine" class="job-heading-line"></div>
     <div id="jobText" class="draggable" data-key="job">メインジョブ</div>
+    <div id="subjobLabelText" class="draggable" data-key="subjobLabel">サブジョブ</div>
+    <div id="subjobLine" class="job-heading-line"></div>
     <div id="subjobText" class="draggable" data-key="subjob">サブジョブ</div>
+    <div id="gathererLabelText" class="draggable" data-key="gathererLabel">ギャザラー</div>
+    <div id="gathererLine" class="job-heading-line spread-job-line"></div>
+    <div id="gathererText" class="draggable" data-key="gatherer">ギャザラー</div>
+    <div id="crafterLabelText" class="draggable" data-key="crafterLabel">クラフター</div>
+    <div id="crafterLine" class="job-heading-line spread-job-line"></div>
+    <div id="crafterText" class="draggable" data-key="crafter">クラフター</div>
     <div id="descText" class="draggable" data-key="desc">自己アピール</div>
     <div id="worldText" class="draggable" data-key="world">活動ワールド</div>
+    <div id="activityLabelText" class="draggable" data-key="activityLabel">アクティブタイム</div>
+    <div id="activityScale" class="activity-scale">
+      <div class="activity-track"><div class="activity-fill"></div></div>
+      <div class="activity-ticks"><span>0</span><span>6</span><span>12</span><span>18</span><span>24</span></div>
+      <div class="activity-time-text">21:00 - 24:00</div>
+    </div>
     <div id="copyrightText" class="draggable" data-key="copyright">© SQUARE ENIX</div>
 
   </div>

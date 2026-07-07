@@ -4,8 +4,23 @@ document.addEventListener("DOMContentLoaded", () => {
   let activePointerId = null;
   let startX = 0;
   let startY = 0;
-  let baseX = 0;
-  let baseY = 0;
+  let dragKeys = [];
+  let basePositions = {};
+
+  const dragGroups = {
+    jobLabel: ["jobLabel", "job"],
+    job: ["jobLabel", "job"],
+    subjobLabel: ["subjobLabel", "subjob"],
+    subjob: ["subjobLabel", "subjob"],
+    gathererLabel: ["gathererLabel", "gatherer"],
+    gatherer: ["gathererLabel", "gatherer"],
+    crafterLabel: ["crafterLabel", "crafter"],
+    crafter: ["crafterLabel", "crafter"]
+  };
+
+  function getDragKeys(textKey) {
+    return dragGroups[textKey] || [textKey];
+  }
 
   document.querySelectorAll(".draggable").forEach(el => {
     el.addEventListener("pointerdown", e => {
@@ -14,6 +29,8 @@ document.addEventListener("DOMContentLoaded", () => {
       target = el;
       key = el.dataset.key;
       activePointerId = e.pointerId;
+      dragKeys = getDragKeys(key).filter(k => App.state.texts[k]);
+      basePositions = {};
 
       App.selectedKey = key;
 
@@ -21,13 +38,17 @@ document.addEventListener("DOMContentLoaded", () => {
         updateEditor();
       }
 
-      target.classList.add("dragging");
+      dragKeys.forEach(k => {
+        const groupEl = document.querySelector(`.draggable[data-key="${k}"]`);
+        if (groupEl) groupEl.classList.add("dragging");
+        basePositions[k] = {
+          x: App.state.texts[k].x,
+          y: App.state.texts[k].y
+        };
+      });
 
       startX = e.clientX;
       startY = e.clientY;
-
-      baseX = App.state.texts[key].x;
-      baseY = App.state.texts[key].y;
 
       target.setPointerCapture(e.pointerId);
     });
@@ -37,8 +58,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const delta = App.getPointerDelta(e, startX, startY);
 
-      App.state.texts[key].x = baseX + delta.x;
-      App.state.texts[key].y = baseY + delta.y;
+      dragKeys.forEach(k => {
+        if (!basePositions[k]) return;
+        App.state.texts[k].x = basePositions[k].x + delta.x;
+        App.state.texts[k].y = basePositions[k].y + delta.y;
+      });
 
       App.renderTexts();
     });
@@ -55,7 +79,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const pointerId = e && e.pointerId;
     if (pointerId !== undefined && pointerId !== activePointerId) return;
 
-    target.classList.remove("dragging");
+    dragKeys.forEach(k => {
+      const groupEl = document.querySelector(`.draggable[data-key="${k}"]`);
+      if (groupEl) groupEl.classList.remove("dragging");
+    });
 
     if (pointerId !== undefined) {
       try {
@@ -66,6 +93,8 @@ document.addEventListener("DOMContentLoaded", () => {
     target = null;
     key = "";
     activePointerId = null;
+    dragKeys = [];
+    basePositions = {};
     App.saveLocal();
   }
 });

@@ -148,3 +148,301 @@ body.bg-editing .draggable {
 body.bg-editing #frame {
   z-index: 5;
 }
+
+/* v31: 横長・雑誌見開きテンプレート */
+#card.layout-magazine {
+  background:
+    radial-gradient(circle at 25% 20%, rgba(255,255,255,.55), rgba(255,255,255,0) 36%),
+    linear-gradient(90deg, #f5ead8 0%, #fff8ed 49%, #eadcc9 50%, #fff8ed 51%, #f4e6d3 100%);
+}
+
+#card.layout-magazine::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 44px;
+  height: 100%;
+  transform: translateX(-50%);
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0),
+    rgba(80,55,35,.16),
+    rgba(30,20,10,.24),
+    rgba(255,255,255,.28),
+    rgba(255,255,255,0)
+  );
+  z-index: 3;
+  pointer-events: none;
+}
+
+#card.layout-magazine::after {
+  content: "CHARACTER FILE";
+  position: absolute;
+  right: 72px;
+  top: 54px;
+  color: rgba(74,53,39,.28);
+  font-family: Cinzel, serif;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: .22em;
+  z-index: 3;
+  pointer-events: none;
+}
+
+#card.layout-magazine #background {
+  opacity: .22;
+  filter: saturate(.8) contrast(.9);
+}
+
+#card.layout-magazine #photoArea {
+  border: 14px solid rgba(255,255,255,.88);
+  box-shadow: 0 18px 45px rgba(70,45,25,.28);
+  background-color: rgba(255,255,255,.35);
+}
+
+#card.layout-magazine .draggable {
+  text-shadow: none;
+  z-index: 4;
+}
+
+#card.layout-magazine #titleText {
+  width: 760px;
+  letter-spacing: .10em;
+  border-bottom: 3px solid rgba(74,53,39,.32);
+  padding-bottom: 12px;
+}
+
+#card.layout-magazine #nameText {
+  width: 760px;
+  line-height: 1.05;
+  letter-spacing: .04em;
+}
+
+#card.layout-magazine #jobText,
+#card.layout-magazine #worldText {
+  width: 330px;
+  padding-top: 18px;
+  border-top: 2px solid rgba(122,79,50,.45);
+}
+
+#card.layout-magazine #subjobText {
+  width: 760px;
+  line-height: 1.55;
+}
+
+#card.layout-magazine #descText {
+  width: 760px;
+  line-height: 1.75;
+  padding: 30px 34px;
+  background: rgba(255,255,255,.36);
+  border-left: 8px solid rgba(122,79,50,.36);
+  box-sizing: border-box;
+}
+
+#card.layout-magazine #copyrightText {
+  width: 500px;
+  text-align: right;
+}
+
+
+
+.job-heading-line {
+  position: absolute;
+  height: 2px;
+  border-radius: 999px;
+  background: #ffffff;
+  z-index: 4;
+  pointer-events: none;
+}
+
+#card.layout-magazine .job-heading-line {
+  height: 3px;
+  box-shadow: none !important;
+}
+
+/* v31.1: job headings and active-time scale */
+#jobLabelText,
+#subjobLabelText,
+#activityLabelText {
+  letter-spacing: .08em;
+  opacity: .92;
+}
+
+.activity-scale {
+  position: absolute;
+  left: 150px;
+  top: 820px;
+  width: 390px;
+  z-index: 4;
+  color: #ffffff;
+  font-family: "Noto Sans JP", sans-serif;
+  text-shadow: 3px 3px 8px rgba(0,0,0,.5);
+  pointer-events: none;
+}
+
+.activity-track {
+  position: relative;
+  height: 16px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.32);
+  border: 1px solid rgba(255,255,255,.55);
+  overflow: hidden;
+}
+
+.activity-fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 87.5%;
+  width: 12.5%;
+  border-radius: 999px;
+  background: rgba(255,255,255,.86);
+}
+
+.activity-ticks {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  font-size: 12px;
+  line-height: 1;
+  opacity: .9;
+}
+
+.activity-time-text {
+  margin-top: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: .08em;
+}
+
+#card.layout-magazine #jobLabelText,
+#card.layout-magazine #subjobLabelText,
+#card.layout-magazine #activityLabelText {
+  letter-spacing: .18em;
+  text-shadow: none;
+}
+
+#card.layout-magazine #jobText,
+#card.layout-magazine #worldText {
+  padding-top: 0;
+}
+
+#card.layout-magazine #subjobText {
+  width: 760px;
+  line-height: 1.5;
+}
+
+#card.layout-magazine .activity-scale {
+  left: 1050px;
+  top: 535px;
+  width: 700px;
+  color: #2b2118;
+  text-shadow: none;
+}
+
+#card.layout-magazine .activity-track {
+  height: 18px;
+  background: rgba(122,79,50,.16);
+  border: 1px solid rgba(122,79,50,.28);
+}
+
+#card.layout-magazine .activity-fill {
+  background: linear-gradient(90deg, rgba(122,79,50,.62), rgba(122,79,50,.88));
+}
+
+#card.layout-magazine .activity-ticks {
+  color: rgba(43,33,24,.72);
+  font-size: 16px;
+}
+
+#card.layout-magazine .activity-time-text {
+  color: #7a4f32;
+  font-size: 24px;
+}
+
+.activity-scale.is-overnight .activity-time-text::after {
+  content: "";
+}
+
+/* v31.2: 見開きの綴じ演出はON/OFFできる専用DOMで制御 */
+#card.layout-magazine::before,
+#card.layout-magazine::after {
+  content: none !important;
+  display: none !important;
+}
+
+#bindingShadow,
+#bindingLine {
+  display: none;
+  position: absolute;
+  top: 0;
+  height: 100%;
+  pointer-events: none;
+}
+
+#bindingShadow {
+  left: 50%;
+  width: 72px;
+  transform: translateX(-50%);
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0),
+    rgba(80,55,35,.13),
+    rgba(30,20,10,.24),
+    rgba(255,255,255,.28),
+    rgba(255,255,255,0)
+  );
+  z-index: 3;
+}
+
+#bindingLine {
+  left: 50%;
+  width: 2px;
+  transform: translateX(-50%);
+  background: rgba(92,64,42,.32);
+  box-shadow:
+    -10px 0 18px rgba(80,55,35,.16),
+    10px 0 18px rgba(255,255,255,.22);
+  z-index: 5;
+}
+
+#card.layout-magazine #background {
+  transition: opacity .15s ease;
+}
+
+
+/* v31.3: 見開き専用 ギャザラー / クラフター欄 */
+#card:not(.layout-magazine) #gathererLabelText,
+#card:not(.layout-magazine) #gathererText,
+#card:not(.layout-magazine) #crafterLabelText,
+#card:not(.layout-magazine) #crafterText,
+#card:not(.layout-magazine) .spread-job-line {
+  display: none !important;
+}
+
+#card.layout-magazine #gathererText,
+#card.layout-magazine #crafterText {
+  width: 320px;
+  line-height: 1.45;
+}
+
+#card.layout-magazine #gathererLabelText,
+#card.layout-magazine #crafterLabelText {
+  letter-spacing: .18em;
+  text-shadow: none;
+}
+
+.spread-job-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px 10px;
+  margin: 6px 0 14px;
+}
+
+.spread-job-options label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+}

@@ -1,4 +1,4 @@
-const CACHE_NAME = "ccmaker-v30_layout_polish";
+const CACHE_NAME = "ccmaker-v31_3_gather_craft";
 
 const APP_FILES = [
   "./",

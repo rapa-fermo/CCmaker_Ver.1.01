@@ -208,3 +208,47 @@
 .bg-edit-check {
   margin-top: 10px;
 }
+
+
+.activity-controls {
+  display: grid;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.12);
+}
+
+.activity-controls label {
+  margin-top: 0;
+  font-size: 12px;
+  opacity: .85;
+}
+
+.activity-controls input[type="range"] {
+  width: 100%;
+}
+
+.activity-controls span {
+  display: inline-block;
+  min-width: 54px;
+  font-size: 12px;
+  opacity: .9;
+}
+
+/* v31.2: 見開き専用オプション */
+.spread-options {
+  margin-top: 10px;
+  padding: 12px;
+  border: 1px solid #d8c8b6;
+  border-radius: 10px;
+  background: #fff8ed;
+}
+
+.spread-options[hidden] {
+  display: none !important;
+}
+
+#magazineTitleCustom {
+  margin-top: 8px;
+}
