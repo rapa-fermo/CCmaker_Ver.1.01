@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CCmaker v31.4 使い方ガイド</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Cinzel:wght@700&display=swap" rel="stylesheet">
+  <style>
+    :root{--ink:#2b2118;--sub:#6b5b50;--accent:#7a4f32;--paper:#fbf7ef;--card:#fffaf3;--line:#e6d8c8;}
+    *{box-sizing:border-box} body{margin:0;background:linear-gradient(135deg,#f5efe5,#fff);color:var(--ink);font-family:"Noto Sans JP",system-ui,sans-serif;line-height:1.75;}
+    header{padding:34px 20px 28px;background:#2b2118;color:#fff;}
+    .wrap{max-width:980px;margin:0 auto;padding:0 20px;}
+    h1{font-family:Cinzel,"Noto Sans JP",serif;font-size:clamp(32px,5vw,54px);line-height:1.1;margin:0 0 10px;}
+    header p{margin:0;color:#f3e7d8}.top-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.btn{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:10px 16px;text-decoration:none;font-weight:800}.btn.primary{background:#fff;color:#2b2118}.btn.ghost{border:1px solid rgba(255,255,255,.45);color:#fff}
+    main{padding:28px 0 60px}.hero{background:var(--card);border:1px solid var(--line);border-radius:28px;padding:24px;box-shadow:0 18px 50px rgba(43,33,24,.08);margin-bottom:24px}.hero img,.section img{width:100%;border-radius:18px;border:1px solid var(--line);background:#fff;display:block}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.section{background:#fff;border:1px solid var(--line);border-radius:24px;padding:22px;margin:18px 0;box-shadow:0 12px 34px rgba(43,33,24,.05)}
+    h2{font-size:26px;margin:0 0 12px;border-left:6px solid var(--accent);padding-left:12px}h3{font-size:18px;margin:20px 0 8px;color:var(--accent)}ul,ol{padding-left:1.4em}.note{background:#f8efe3;border:1px solid #ead7c0;border-radius:16px;padding:14px 16px;color:#4b3628}.steps{counter-reset:step;display:grid;gap:12px}.step{position:relative;background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 14px 14px 54px}.step:before{counter-increment:step;content:counter(step);position:absolute;left:14px;top:14px;width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:900}.faq details{border-top:1px solid var(--line);padding:12px 0}.faq summary{font-weight:800;cursor:pointer}.small{color:var(--sub);font-size:14px}footer{padding:26px 0;color:var(--sub);text-align:center}@media(max-width:760px){.grid{grid-template-columns:1fr}.section,.hero{border-radius:18px;padding:16px}header{padding-top:26px}}
+  </style>
+</head>
+<body>
+<header><div class="wrap"><h1>CCmaker v31.4<br>使い方ガイド</h1><p>FINAL FANTASY XIV向けキャラクターカードを、表紙風・見開き風で作成するためのガイドです。</p><div class="top-actions"><a class="btn primary" href="index.html">編集画面へ戻る</a><a class="btn ghost" href="#quick">3分で作る</a><a class="btn ghost" href="#faq">FAQ</a></div></div></header>
+<main class="wrap">
+<section id="quick" class="hero"><img src="assets/guide/quick-start.svg" alt="3分で作るキャラカード"><h2>3分で作るキャラカード</h2><div class="steps"><div class="step">写真を選びます。背景画像も必要なら追加します。</div><div class="step">名前、活動ワールド、自己アピールを入力します。</div><div class="step">メインジョブ、必要ならサブジョブを選びます。</div><div class="step">カード上の文字をドラッグして位置を整え、PNG保存します。</div></div></section>
+<div class="grid"><section class="section"><img src="assets/guide/cover-card.svg" alt="表紙風カード"><h2>表紙風（縦型）</h2><p>SNS投稿向けの縦型カードです。v30までの表紙風レイアウトを基準に、名前・ジョブ・説明文を1枚にまとめられます。</p><ul><li>フレームON/OFFが使えます。</li><li>活動時間は必要な場合だけONにします。</li><li>サブジョブ欄はON/OFFできます。</li></ul></section><section class="section"><img src="assets/guide/spread-card.svg" alt="見開き風カード"><h2>見開き風（横型）</h2><p>雑誌や設定資料集のような横長カードです。背景透過率、中央綴じ、ギャザラー・クラフター欄が使えます。</p><ul><li>背景表示範囲は全面・左ページ・右ページから選べます。</li><li>中央綴じラインと綴じ影を切り替えできます。</li><li>ギャザラー・クラフターは個別ON/OFFできます。</li></ul></section></div>
+<section class="section"><h2>ジョブ・ギャザラー・クラフター</h2><p>メインジョブは1つ選択、サブジョブは複数選択できます。見開き風では説明文の上にギャザラー・クラフター欄を追加できます。</p><div class="note">取得していない項目がある場合は、ギャザラー欄・クラフター欄を個別にOFFにしてください。</div></section>
+<section class="section"><img src="assets/guide/activity-time.svg" alt="活動時間スケール"><h2>活動時間スケール</h2><p>開始と終了をスライダーで設定します。22:00〜02:00のように0時をまたぐ場合は、自動的に翌日表示になります。</p></section>
+<section class="section"><img src="assets/guide/drag-edit.svg" alt="ドラッグ編集"><h2>ドラッグ編集と文字調整</h2><p>カード上の文字をクリックして選択し、ドラッグで位置を変更できます。ジョブ見出しとジョブ内容は一緒に動きますが、文字サイズ・色・太字は選択した文字ごとに変更できます。</p></section>
+<section class="section"><img src="assets/guide/save-json.svg" alt="保存と読込"><h2>保存と読込</h2><h3>PNG保存 / 共有</h3><p>完成したカードを画像として保存します。スマホでは共有シートが開く場合があります。</p><h3>JSON保存 / JSON読込</h3><p>編集途中の状態を保存・復元できます。画像を含めた完全保存をしたい場合はJSON保存を使ってください。</p></section>
+<section id="faq" class="section faq"><h2>FAQ</h2><details><summary>サブジョブが表示されません</summary><p>「サブジョブ欄を表示する」がONになっているか確認してください。</p></details><details><summary>見開き風でフレーム設定が見当たりません</summary><p>見開き風ではフレーム設定は非表示です。代わりに中央綴じ、綴じ影、背景透過率を調整できます。</p></details><details><summary>活動時間が表示されません</summary><p>「活動時間スケールバーを表示する」をONにしてください。表紙風テンプレートでは初期OFFの場合があります。</p></details><details><summary>背景が濃すぎます</summary><p>見開き風では「背景透過率」を下げると、写真を薄く敷いた誌面風にできます。</p></details><details><summary>文字が重なった時は？</summary><p>カード上の文字をドラッグして位置を調整してください。フォントサイズを少し下げるのも有効です。</p></details></section>
+<p class="small">このツールで作成したカードは、FINAL FANTASY XIV のキャラクターを対象としています。それ以外の作品・版権キャラクターへのご使用はお控えください。</p>
+</main><footer>CCmaker v31.4</footer>
+</body>
+</html>
