@@ -1,4 +1,4 @@
-const CACHE_NAME = "ccmaker-v31_5_magazine_theme";
+const CACHE_NAME = "ccmaker-v32_1_simple_help";
 
 const APP_FILES = [
   "./",
@@ -26,13 +26,7 @@ const APP_FILES = [
   "./assets/frames/frame2.png",
   "./assets/frames/frame3.png",
   "./assets/icons/icon-192.png",
-  "./assets/icons/icon-512.png",
-  "./assets/guide/quick-start.svg",
-  "./assets/guide/cover-card.svg",
-  "./assets/guide/spread-card.svg",
-  "./assets/guide/drag-edit.svg",
-  "./assets/guide/activity-time.svg",
-  "./assets/guide/save-json.svg"
+  "./assets/icons/icon-512.png"
 ];
 
 self.addEventListener("install", event => {

@@ -729,7 +729,7 @@ renderJobGuideLines(showSubjob = true, showGatherer = false, showCrafter = false
       localStorage.removeItem("magCardState_v31_2_spread_options");
       localStorage.removeItem("magCardState_v31_4_1_mobile_edit_fix");
       localStorage.setItem(
-        "magCardState_v31_3_gather_craft",
+        "magCardState_v32_compact_ui",
         JSON.stringify(saveData)
       );
     } catch (err) {
@@ -739,13 +739,13 @@ renderJobGuideLines(showSubjob = true, showGatherer = false, showCrafter = false
   },
 
   loadLocal() {
-    // v31.1では表紙風の初期配置を修正しているため、
+    // v32では編集UIを整理しているため、
     // 旧v31系の自動保存座標は引き継がず、新しい初期配置を優先する。
     localStorage.removeItem("magCardState_v31_job_group_cover_adjust");
     localStorage.removeItem("magCardState_v31_cover_restore");
     localStorage.removeItem("magCardState_v31_1_cover_job_lines");
     const saved =
-      localStorage.getItem("magCardState_v31_3_gather_craft");
+      localStorage.getItem("magCardState_v32_compact_ui");
 
     if (!saved) return;
 

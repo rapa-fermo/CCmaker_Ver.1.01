@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Character Card Maker v31.5</title>
+  <title>Character Card Maker v32</title>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#3b82f6">
   <meta name="mobile-web-app-capable" content="yes">
@@ -27,6 +27,42 @@
 .mobile-floating-actions .guide-floating{background:#f8fafc;color:#1e293b;}
 @media (max-width: 860px){.guide-button{font-size:12px;padding:7px 9px;}}
 </style>
+
+
+<style>
+/* v32: compact accordion editor */
+.v32-accordion-root{display:flex;flex-direction:column;gap:10px;margin-top:12px;}
+.v32-section{border:1px solid rgba(15,23,42,.12);border-radius:16px;background:rgba(255,255,255,.78);box-shadow:0 8px 24px rgba(15,23,42,.06);overflow:hidden;}
+.v32-section>summary{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;cursor:pointer;font-weight:900;color:#1f2937;list-style:none;user-select:none;}
+.v32-section>summary::-webkit-details-marker{display:none;}
+.v32-section>summary::after{content:'▶';font-size:12px;color:#64748b;transition:transform .18s ease;}
+.v32-section[open]>summary::after{transform:rotate(90deg);}
+.v32-section-body{padding:0 16px 16px;border-top:1px solid rgba(15,23,42,.08);animation:v32fade .18s ease;}
+@keyframes v32fade{from{opacity:.4;transform:translateY(-3px)}to{opacity:1;transform:none}}
+.v32-section-body>label:first-child,.v32-section-body>.job-group:first-child{margin-top:14px;}
+.v32-section .hint-text{font-size:12px;line-height:1.55;}
+.v32-help{display:inline-flex;align-items:center;justify-content:center;width:21px;height:21px;border-radius:999px;background:#eef2ff;color:#4338ca;font-size:12px;font-weight:900;margin-left:auto;}
+.v32-help[data-tip]::before{content:attr(data-tip);display:none;position:absolute;z-index:30;max-width:260px;background:#111827;color:#fff;padding:8px 10px;border-radius:10px;font-size:12px;font-weight:600;line-height:1.5;box-shadow:0 8px 24px rgba(0,0,0,.22);transform:translate(-205px,28px);}
+.v32-help:hover::before,.v32-help:focus::before{display:block;}
+.v32-job-accordion{border:1px solid rgba(15,23,42,.1);border-radius:12px;margin:10px 0;background:rgba(248,250,252,.75);overflow:hidden;}
+.v32-job-accordion>summary{padding:10px 12px;font-weight:800;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;}
+.v32-job-accordion>summary::-webkit-details-marker{display:none;}
+.v32-job-accordion>summary::after{content:'開く';font-size:11px;color:#64748b;}
+.v32-job-accordion[open]>summary::after{content:'閉じる';}
+.v32-job-accordion .main-job-buttons,.v32-job-accordion .sub-job-buttons{padding:0 10px 12px;}
+.v32-hidden{display:none!important;}
+.v32-section-save .v32-section-body{display:grid;gap:10px;}
+.v32-section-save button{width:100%;}
+.v32-compact-note{font-size:12px;line-height:1.55;color:#64748b;margin:10px 0 0;}
+@media (max-width:860px){
+  .panel{padding-bottom:110px;}
+  .v32-section>summary{padding:13px 14px;font-size:15px;}
+  .v32-section-body{padding:0 12px 14px;}
+  .v32-help[data-tip]::before{transform:translate(-190px,26px);max-width:220px;}
+  .main-job-buttons,.sub-job-buttons,.spread-job-options{grid-template-columns:1fr 1fr!important;gap:8px!important;}
+}
+</style>
+
 </head>
 
 <body class="mobile-edit">
@@ -501,6 +537,213 @@
 <script src="js/drag.js"></script>
 <script src="js/stability.js"></script>
 <script src="js/export.js"></script>
+
+
+
+<script>
+// v32: 編集パネルを折りたたみ式に再構成する。
+document.addEventListener('DOMContentLoaded', () => {
+  const panel = document.querySelector('.panel');
+  const notice = document.querySelector('.notice-box');
+  if (!panel || !notice || panel.querySelector('.v32-accordion-root')) return;
+
+  const root = document.createElement('div');
+  root.className = 'v32-accordion-root';
+  notice.insertAdjacentElement('afterend', root);
+
+  const tips = {
+    basic: '名前・活動ワールド・自己アピールなど、カードの基本情報を編集します。',
+    job: 'メインジョブは1つ、サブジョブは複数選択できます。見出し表示もここで変更できます。',
+    gather: '見開き風専用のギャザラー／クラフター欄です。未取得の場合はOFFにできます。',
+    design: 'カードタイプ、テンプレート、背景、見開きテーマ、活動時間などを設定します。',
+    text: '選択中の文字のフォント・サイズ・色・太字を変更します。文字はプレビュー上でドラッグできます。',
+    save: 'PNG保存／共有、JSON保存、JSON読込を行います。JSONは再編集用の保存データです。'
+  };
+
+  function makeSection(title, key){
+    const details = document.createElement('details');
+    details.className = 'v32-section v32-section-' + key;
+    details.dataset.section = key;
+    const summary = document.createElement('summary');
+    summary.innerHTML = `<span>${title}</span><span class="v32-help" tabindex="0" data-tip="${tips[key] || ''}">?</span>`;
+    const body = document.createElement('div');
+    body.className = 'v32-section-body';
+    details.append(summary, body);
+    root.appendChild(details);
+    return body;
+  }
+
+  const sections = {
+    basic: makeSection('📁 基本情報', 'basic'),
+    job: makeSection('⚔ ジョブ', 'job'),
+    gather: makeSection('🌿 ギャザラー・クラフター', 'gather'),
+    design: makeSection('🖼 デザイン', 'design'),
+    text: makeSection('✍ 文字編集', 'text'),
+    save: makeSection('💾 保存', 'save')
+  };
+
+  function labelFor(id){
+    const el = document.getElementById(id);
+    if (!el) return null;
+    if (el.parentElement && el.parentElement.tagName === 'LABEL') return el.parentElement;
+    let prev = el.previousElementSibling;
+    while (prev && prev.tagName === 'HR') prev = prev.previousElementSibling;
+    if (prev && prev.tagName === 'LABEL') return prev;
+    return null;
+  }
+
+  function appendControl(body, id, extraIds=[]){
+    const el = document.getElementById(id);
+    if (!el) return;
+    const lab = labelFor(id);
+    if (lab && lab.parentNode) {
+      body.appendChild(lab);
+      if (!lab.contains(el) && el.parentNode) body.appendChild(el);
+    } else if (el.parentNode) {
+      body.appendChild(el);
+    }
+    extraIds.forEach(extraId => {
+      const ex = document.getElementById(extraId);
+      if (ex && ex.parentNode) body.appendChild(ex);
+    });
+  }
+
+  function findTopLabel(text){
+    return Array.from(panel.children).find(el => el.tagName === 'LABEL' && el.textContent.trim() === text);
+  }
+
+  function moveRange(startNode, endNode, body){
+    if (!startNode) return;
+    const nodes = [];
+    let n = startNode;
+    while (n && n !== endNode) {
+      const next = n.nextSibling;
+      if (n.nodeType === 1 || (n.nodeType === 3 && n.textContent.trim())) nodes.push(n);
+      n = next;
+    }
+    nodes.forEach(node => body.appendChild(node));
+  }
+
+  // 基本情報：指定順に並べ直し
+  appendControl(sections.basic, 'nameInput');
+  appendControl(sections.basic, 'worldSelect');
+  appendControl(sections.basic, 'descInput');
+  const basicNote = document.createElement('p');
+  basicNote.className = 'v32-compact-note';
+  basicNote.textContent = 'よく使う基本情報だけをまとめています。文字の位置はプレビュー上で直接ドラッグできます。';
+  sections.basic.appendChild(basicNote);
+
+  // ジョブ：メイン〜サブ〜見出し設定
+  const mainLabel = findTopLabel('メインジョブ');
+  const subLabel = findTopLabel('サブジョブ');
+  moveRange(mainLabel, subLabel, sections.job);
+  const headingLabel = findTopLabel('ジョブ見出し');
+  const activityLabel = findTopLabel('活動時間');
+  moveRange(subLabel, headingLabel, sections.job);
+  moveRange(headingLabel, activityLabel, sections.job);
+
+  // デザイン：カードタイプ・テンプレート・画像・背景・フレーム・見開き設定・活動時間
+  appendControl(sections.design, 'cardTypeSelect');
+  appendControl(sections.design, 'templateSelect');
+  appendControl(sections.design, 'photoInput');
+  appendControl(sections.design, 'backgroundInput');
+  appendControl(sections.design, 'backgroundEditMode');
+  const bgHint = Array.from(panel.querySelectorAll('.hint-text')).find(p => p.textContent.includes('背景だけドラッグ'));
+  if (bgHint && bgHint.parentNode) sections.design.appendChild(bgHint);
+  const frameOptions = document.getElementById('frameOptions');
+  if (frameOptions && frameOptions.parentNode) sections.design.appendChild(frameOptions);
+  const spreadOptions = document.getElementById('spreadOptions');
+  if (spreadOptions && spreadOptions.parentNode) sections.design.appendChild(spreadOptions);
+  if (activityLabel) moveRange(activityLabel, findTopLabel('自己アピール'), sections.design);
+
+  // ギャザクラ：spreadOptions内から独立セクションへ移動
+  function moveWithLabelFromAnywhere(id, body){
+    const el = document.getElementById(id);
+    if (!el) return;
+    const lab = labelFor(id);
+    if (lab && lab.parentNode) {
+      body.appendChild(lab);
+      if (!lab.contains(el) && el.parentNode) body.appendChild(el);
+    } else if (el.parentNode) {
+      body.appendChild(el);
+    }
+  }
+  moveWithLabelFromAnywhere('gathererToggle', sections.gather);
+  const gathererOptions = document.getElementById('gathererOptions');
+  if (gathererOptions && gathererOptions.parentNode) sections.gather.appendChild(gathererOptions);
+  moveWithLabelFromAnywhere('crafterToggle', sections.gather);
+  const crafterOptions = document.getElementById('crafterOptions');
+  if (crafterOptions && crafterOptions.parentNode) sections.gather.appendChild(crafterOptions);
+
+  // 文字編集
+  appendControl(sections.text, 'fontSelect');
+  const fontHint = Array.from(panel.querySelectorAll('.hint-text')).find(p => p.textContent.includes('ジョブ見出しとジョブ内容'));
+  if (fontHint && fontHint.parentNode) sections.text.insertBefore(fontHint, sections.text.firstChild);
+  appendControl(sections.text, 'fontSize');
+  appendControl(sections.text, 'fontColor');
+  appendControl(sections.text, 'boldCheck');
+
+  // 保存
+  const saveButton = document.getElementById('saveButton');
+  const saveJson = document.getElementById('saveJson');
+  if (saveButton && saveButton.parentNode) sections.save.appendChild(saveButton);
+  if (saveJson && saveJson.parentNode) sections.save.appendChild(saveJson);
+  appendControl(sections.save, 'loadJson');
+  const guide = document.querySelector('.guide-button');
+  if (guide) {
+    const guideClone = guide.cloneNode(true);
+    guideClone.textContent = 'ⓘ 使い方ガイドを開く';
+    guideClone.style.justifyContent = 'center';
+    sections.save.appendChild(guideClone);
+  }
+
+  // ジョブカテゴリ自体も折りたたみ化
+  function compactJobGroups(scope){
+    scope.querySelectorAll('.job-group').forEach(group => {
+      if (group.closest('details.v32-job-accordion')) return;
+      const title = group.querySelector(':scope > .job-title');
+      if (!title) return;
+      const d = document.createElement('details');
+      d.className = 'v32-job-accordion';
+      const s = document.createElement('summary');
+      s.textContent = title.textContent.trim();
+      title.remove();
+      group.parentNode.insertBefore(d, group);
+      d.appendChild(s);
+      d.appendChild(group);
+    });
+  }
+  compactJobGroups(sections.job);
+
+  // 表紙風ではギャザクラ・見開き系を隠す。見開き時だけ表示。
+  window.updateV32AccordionVisibility = function(){
+    const layout = (window.App && App.state && App.state.layout) || 'portrait';
+    const isSpread = layout === 'magazine';
+    root.querySelector('.v32-section-gather')?.classList.toggle('v32-hidden', !isSpread);
+    // spreadOptions自体は既存UI制御もあるため、念のためここでも制御
+    if (spreadOptions) spreadOptions.hidden = !isSpread;
+  };
+
+  ['cardTypeSelect','templateSelect'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('change', () => setTimeout(window.updateV32AccordionVisibility, 50));
+  });
+
+  if (window.App && typeof App.render === 'function' && !App._v32RenderWrapped) {
+    const originalRender = App.render.bind(App);
+    App.render = function(){
+      const result = originalRender();
+      setTimeout(window.updateV32AccordionVisibility, 0);
+      return result;
+    };
+    App._v32RenderWrapped = true;
+  }
+  window.updateV32AccordionVisibility();
+
+  // 余った区切り線は非表示にしてコンパクト化
+  panel.querySelectorAll(':scope > hr').forEach(hr => hr.remove());
+});
+</script>
 
 <script>
 document.addEventListener('DOMContentLoaded',()=>{
