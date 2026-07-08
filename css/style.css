@@ -8,6 +8,7 @@
   --card-width: 700px;
   --card-height: 1000px;
   --card-scale: 1;
+  --preview-zoom: 1;
 }
 
 html {
@@ -107,7 +108,7 @@ select {
     top: 0;
     z-index: 1000;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 6px;
     padding: 10px 12px;
     background: rgba(241, 245, 249, 0.94);
@@ -136,11 +137,13 @@ select {
     display: none !important;
   }
 
-  body.mobile-preview .panel {
+  body.mobile-preview .panel,
+  body.mobile-layout .panel {
     display: none !important;
   }
 
-  body.mobile-preview .preview {
+  body.mobile-preview .preview,
+  body.mobile-layout .preview {
     display: flex !important;
     position: static;
     min-height: calc(100svh - 64px);
@@ -150,9 +153,94 @@ select {
     align-items: flex-start;
   }
 
-  body.mobile-preview .card-shell {
+  body.mobile-preview .card-shell,
+  body.mobile-layout .card-shell {
     margin: 0 auto;
     filter: drop-shadow(0 18px 26px rgba(15, 23, 42, 0.24));
+  }
+
+  body.mobile-layout .preview {
+    background: radial-gradient(circle at top, #fff7ed 0, #e2e8f0 50%, #cbd5e1 100%);
+  }
+
+  body.mobile-layout .layout-hint-bar {
+    display: block;
+  }
+
+  body.mobile-preview .mobile-preview-zoom {
+    display: flex;
+  }
+
+  body.mobile-preview .layout-hint-bar {
+    display: none;
+  }
+
+  body.mobile-preview #card {
+    pointer-events: none;
+  }
+
+  body.mobile-preview .card-shell {
+    width: calc(var(--card-width) * var(--card-scale) * var(--preview-zoom));
+    height: calc(var(--card-height) * var(--card-scale) * var(--preview-zoom));
+  }
+
+  body.mobile-preview #card {
+    transform: scale(calc(var(--card-scale) * var(--preview-zoom)));
+  }
+
+  .mobile-preview-zoom {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: calc(72px + env(safe-area-inset-bottom));
+    z-index: 1001;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.92);
+    box-shadow: 0 10px 26px rgba(15,23,42,.22);
+    backdrop-filter: blur(10px);
+  }
+
+  .mobile-preview-zoom button {
+    min-width: 42px;
+    min-height: 38px;
+    border: 1px solid #cbd5e1;
+    border-radius: 999px;
+    background: #0f172a;
+    color: #fff;
+    font-weight: 800;
+  }
+
+  .mobile-preview-zoom #previewZoomReset {
+    min-width: 74px;
+    background: #ffffff;
+    color: #0f172a;
+  }
+
+  .mobile-preview-zoom span {
+    min-width: 54px;
+    text-align: center;
+    font-weight: 800;
+    color: #0f172a;
+  }
+
+  .layout-hint-bar {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: calc(72px + env(safe-area-inset-bottom));
+    z-index: 1001;
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: rgba(15,23,42,.88);
+    color: #fff;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 700;
+    box-shadow: 0 10px 26px rgba(15,23,42,.22);
   }
 
   .panel {
@@ -244,19 +332,21 @@ select {
   html,
   body {
     min-height: 100svh;
-    overflow-x: hidden;
+    overflow-x: auto;
     overscroll-behavior-y: contain;
   }
 
-  body.mobile-preview {
+  body.mobile-preview,
+  body.mobile-layout {
     overflow-y: auto;
   }
 
-  body.mobile-preview .preview {
+  body.mobile-preview .preview,
+  body.mobile-layout .preview {
     height: auto;
     max-height: none;
     overflow-y: auto !important;
-    overflow-x: hidden;
+    overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     touch-action: pan-y pinch-zoom;
     overscroll-behavior: contain;
@@ -269,5 +359,164 @@ select {
   body.mobile-edit .panel {
     min-height: calc(100svh - 64px);
     overflow: visible;
+  }
+}
+
+.mobile-preview-zoom,.layout-hint-bar{display:none;}
+@media (min-width:901px){.mobile-preview-zoom,.layout-hint-bar{display:none!important;}}
+
+
+/* =========================
+   v33.1 Mobile spread landscape workspace
+   ========================= */
+.landscape-prompt,
+.mobile-landscape-toolbar {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  body.mobile-spread-workspace.mobile-needs-landscape .landscape-prompt {
+    position: fixed;
+    inset: 0;
+    z-index: 2200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 22px;
+    background: linear-gradient(135deg, rgba(15,23,42,.92), rgba(51,65,85,.84));
+    color: #fff;
+  }
+
+  .landscape-prompt-card {
+    width: min(420px, 100%);
+    padding: 24px 20px;
+    border-radius: 24px;
+    background: rgba(255,255,255,.96);
+    color: #0f172a;
+    text-align: center;
+    box-shadow: 0 24px 60px rgba(0,0,0,.35);
+  }
+
+  .landscape-prompt-icon {
+    font-size: 40px;
+    margin-bottom: 8px;
+  }
+
+  .landscape-prompt-card h3 {
+    font-size: 21px;
+    margin: 0 0 10px;
+  }
+
+  .landscape-prompt-card p {
+    margin: 0 0 18px;
+    line-height: 1.7;
+    font-size: 14px;
+    color: #334155;
+  }
+
+  .landscape-prompt-actions {
+    display: grid;
+    gap: 10px;
+  }
+
+  .landscape-prompt-actions button {
+    min-height: 46px;
+    border: none;
+    border-radius: 999px;
+    font-weight: 800;
+  }
+
+  #landscapeFullscreenButton {
+    background: #0f172a;
+    color: #fff;
+  }
+
+  #landscapeContinueButton {
+    background: #e2e8f0;
+    color: #0f172a;
+  }
+
+  body.mobile-spread-workspace.mobile-landscape .mobile-tabs,
+  body.mobile-spread-workspace.mobile-landscape .mobile-floating-actions {
+    display: none !important;
+  }
+
+  body.mobile-spread-workspace.mobile-landscape {
+    padding-bottom: 0;
+    overflow: hidden;
+    background: #020617;
+  }
+
+  body.mobile-spread-workspace.mobile-landscape .container {
+    min-height: 100svh;
+  }
+
+  body.mobile-spread-workspace.mobile-landscape .preview {
+    position: fixed !important;
+    inset: 0;
+    z-index: 1800;
+    display: flex !important;
+    width: 100vw;
+    height: 100svh;
+    min-height: 100svh;
+    padding: 44px 10px 54px;
+    background: radial-gradient(circle at center, #334155 0, #0f172a 58%, #020617 100%);
+    overflow: auto !important;
+    align-items: flex-start;
+    justify-content: center;
+    touch-action: pan-x pan-y pinch-zoom;
+  }
+
+  body.mobile-spread-workspace.mobile-landscape .mobile-landscape-toolbar {
+    position: fixed;
+    top: env(safe-area-inset-top);
+    left: 0;
+    right: 0;
+    z-index: 1900;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 6px 10px;
+    background: rgba(15,23,42,.76);
+    color: #fff;
+    backdrop-filter: blur(10px);
+  }
+
+  .mobile-landscape-toolbar button {
+    min-height: 32px;
+    border: 1px solid rgba(255,255,255,.28);
+    border-radius: 999px;
+    padding: 4px 12px;
+    background: rgba(255,255,255,.12);
+    color: #fff;
+    font-weight: 800;
+    font-size: 13px;
+  }
+
+  .mobile-landscape-toolbar span {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: .08em;
+  }
+
+  body.mobile-spread-workspace.mobile-landscape .layout-hint-bar,
+  body.mobile-spread-workspace.mobile-landscape .mobile-preview-zoom {
+    bottom: calc(8px + env(safe-area-inset-bottom));
+    left: max(10px, env(safe-area-inset-left));
+    right: max(10px, env(safe-area-inset-right));
+  }
+
+  body.mobile-spread-workspace.mobile-landscape .card-shell {
+    margin: 0 auto;
+  }
+
+  body.mobile-spread-workspace.mobile-landscape.mobile-preview .card-shell {
+    width: calc(var(--card-width) * var(--card-scale) * var(--preview-zoom));
+    height: calc(var(--card-height) * var(--card-scale) * var(--preview-zoom));
+  }
+
+  body.mobile-spread-workspace.mobile-landscape.mobile-preview #card {
+    transform: scale(calc(var(--card-scale) * var(--preview-zoom)));
   }
 }

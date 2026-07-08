@@ -5,16 +5,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const size = App.getCardSize ? App.getCardSize() : { width: 700, height: 1000 };
     const isMobile = window.innerWidth <= 900;
-    const padding = isMobile ? 24 : 60;
+    const isSpreadLandscapeWorkspace = isMobile
+      && document.body.classList.contains("mobile-spread-workspace")
+      && document.body.classList.contains("mobile-landscape");
+    const padding = isSpreadLandscapeWorkspace ? 28 : (isMobile ? 24 : 60);
     const availableWidth = Math.max(280, preview.clientWidth - padding);
-    const availableHeight = Math.max(280, window.innerHeight - padding);
+    const availableHeight = Math.max(220, (isSpreadLandscapeWorkspace ? preview.clientHeight : window.innerHeight) - padding);
 
     const widthScale = availableWidth / size.width;
     const heightScale = availableHeight / size.height;
     const baseScale = Math.min(1, widthScale, heightScale);
-    const scale = isMobile && document.body.classList.contains("mobile-edit")
-      ? Math.min(baseScale, size.width > size.height ? 0.32 : 0.44)
-      : baseScale;
+    const scale = isSpreadLandscapeWorkspace
+      ? baseScale
+      : (isMobile && document.body.classList.contains("mobile-edit")
+        ? Math.min(baseScale, size.width > size.height ? 0.32 : 0.44)
+        : baseScale);
 
     document.documentElement.style.setProperty(
       "--card-scale",

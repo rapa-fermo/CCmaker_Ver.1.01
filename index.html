@@ -69,6 +69,7 @@
 
 <div class="mobile-tabs" aria-label="スマホ表示切替">
   <button id="editTabButton" class="active" type="button">編集</button>
+  <button id="layoutTabButton" type="button">レイアウト</button>
   <button id="previewTabButton" type="button">確認</button>
 </div>
 
@@ -483,6 +484,28 @@
   </aside>
 
 <main class="preview">
+  <div id="landscapePrompt" class="landscape-prompt" aria-live="polite">
+    <div class="landscape-prompt-card">
+      <div class="landscape-prompt-icon">🔄</div>
+      <h3>横向きでご利用ください</h3>
+      <p>見開き風カードは、スマホを横向きにするとレイアウト編集・確認が全画面で見やすくなります。</p>
+      <div class="landscape-prompt-actions">
+        <button id="landscapeFullscreenButton" type="button">横向き全画面で開く</button>
+        <button id="landscapeContinueButton" type="button">このまま続ける</button>
+      </div>
+    </div>
+  </div>
+  <div class="mobile-landscape-toolbar" aria-label="横向き操作バー">
+    <button id="landscapeBackEdit" type="button">編集へ戻る</button>
+    <span id="landscapeModeLabel">レイアウト</span>
+  </div>
+  <div class="mobile-preview-zoom" aria-label="確認画面ズーム">
+    <button id="previewZoomOut" type="button">−</button>
+    <span id="previewZoomLabel">100%</span>
+    <button id="previewZoomIn" type="button">＋</button>
+    <button id="previewZoomReset" type="button">リセット</button>
+  </div>
+  <div class="layout-hint-bar">文字・写真・背景を直接ドラッグできます</div>
   <div class="card-shell">
   <div id="card">
 

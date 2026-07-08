@@ -1,4 +1,4 @@
-const CACHE_NAME = "ccmaker-v32_1_simple_help";
+const CACHE_NAME = "ccmaker-v33_1_landscape_workspace";
 
 const APP_FILES = [
   "./",

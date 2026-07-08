@@ -728,8 +728,10 @@ renderJobGuideLines(showSubjob = true, showGatherer = false, showCrafter = false
       localStorage.removeItem("magCardState_v31_1_cover_job_lines");
       localStorage.removeItem("magCardState_v31_2_spread_options");
       localStorage.removeItem("magCardState_v31_4_1_mobile_edit_fix");
+      localStorage.removeItem("magCardState_v32_compact_ui");
+      localStorage.removeItem("magCardState_v33_workspace_zoom");
       localStorage.setItem(
-        "magCardState_v32_compact_ui",
+        "magCardState_v33_1_landscape_workspace",
         JSON.stringify(saveData)
       );
     } catch (err) {
@@ -744,8 +746,10 @@ renderJobGuideLines(showSubjob = true, showGatherer = false, showCrafter = false
     localStorage.removeItem("magCardState_v31_job_group_cover_adjust");
     localStorage.removeItem("magCardState_v31_cover_restore");
     localStorage.removeItem("magCardState_v31_1_cover_job_lines");
+    localStorage.removeItem("magCardState_v32_compact_ui");
+    localStorage.removeItem("magCardState_v33_workspace_zoom");
     const saved =
-      localStorage.getItem("magCardState_v32_compact_ui");
+      localStorage.getItem("magCardState_v33_1_landscape_workspace");
 
     if (!saved) return;
 
