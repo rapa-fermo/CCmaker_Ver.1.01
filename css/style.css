@@ -520,3 +520,70 @@ select {
     transform: scale(calc(var(--card-scale) * var(--preview-zoom)));
   }
 }
+
+
+/* =========================
+   v33.1.1 Android edit scroll stability
+   ========================= */
+@media (max-width: 900px) {
+  html,
+  body {
+    height: auto;
+    min-height: 100dvh;
+    overflow-x: hidden;
+  }
+
+  body.mobile-edit {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    height: auto !important;
+    min-height: 100dvh;
+    touch-action: pan-y;
+  }
+
+  body.mobile-edit .container {
+    display: block;
+    min-height: 100dvh;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  body.mobile-edit .panel {
+    display: block !important;
+    position: relative;
+    height: auto !important;
+    min-height: calc(100dvh - 64px);
+    max-height: none !important;
+    overflow: visible !important;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+  }
+
+  body.mobile-input-focused,
+  body.mobile-input-focused .container,
+  body.mobile-input-focused .panel {
+    overflow-y: auto !important;
+    overscroll-behavior-y: auto;
+  }
+
+  body.mobile-edit .preview {
+    display: none !important;
+    position: static !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+  }
+
+  body.mobile-spread-workspace.mobile-landscape.mobile-layout,
+  body.mobile-spread-workspace.mobile-landscape.mobile-preview {
+    overflow: hidden !important;
+    height: 100dvh;
+  }
+
+  body.mobile-spread-workspace.mobile-landscape .preview {
+    height: 100dvh;
+    min-height: 100dvh;
+  }
+}

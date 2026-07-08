@@ -1,4 +1,4 @@
-const CACHE_NAME = "ccmaker-v33_1_landscape_workspace";
+const CACHE_NAME = "ccmaker-v33_1_1_android_scroll_fix";
 
 const APP_FILES = [
   "./",

@@ -344,3 +344,20 @@
 #spreadThemeSelect {
   font-weight: 700;
 }
+
+
+/* v33.1.1: Android Chrome keyboard / scroll fix */
+@media (max-width: 900px) {
+  .panel {
+    height: auto !important;
+    min-height: calc(100dvh - 64px);
+    max-height: none !important;
+    overflow: visible !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  body.mobile-edit .panel {
+    overflow-y: visible !important;
+    touch-action: pan-y;
+  }
+}

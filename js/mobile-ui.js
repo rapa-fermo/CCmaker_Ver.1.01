@@ -17,6 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const landscapeModeLabel = document.getElementById("landscapeModeLabel");
   let previewZoom = 1;
   let allowPortraitSpreadWorkspace = false;
+  let editingInput = false;
 
   function isMobileLayout() {
     return window.matchMedia("(max-width: 900px)").matches;
@@ -31,6 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function updateLandscapeWorkspaceState() {
+    if (editingInput && document.body.classList.contains("mobile-edit")) return;
     const isWorkspaceMode = document.body.classList.contains("mobile-layout") || document.body.classList.contains("mobile-preview");
     const active = isMobileLayout() && isSpreadLayout() && isWorkspaceMode;
     const landscape = isLandscape();
@@ -136,7 +138,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   landscapeBackEditBtn?.addEventListener("click", () => setMode("edit"));
 
-  window.addEventListener("resize", updateLandscapeWorkspaceState);
+  let workspaceResizeTimer = null;
+  window.addEventListener("resize", () => {
+    if (editingInput && document.body.classList.contains("mobile-edit")) return;
+    clearTimeout(workspaceResizeTimer);
+    workspaceResizeTimer = setTimeout(updateLandscapeWorkspaceState, 120);
+  });
   window.addEventListener("orientationchange", () => {
     allowPortraitSpreadWorkspace = false;
     setTimeout(updateLandscapeWorkspaceState, 250);
@@ -148,7 +155,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.querySelectorAll("input, textarea, select").forEach(el => {
     el.addEventListener("focus", () => {
+      editingInput = true;
+      document.body.classList.add("mobile-input-focused");
       if (isMobileLayout()) setMode("edit");
+    });
+
+    el.addEventListener("blur", () => {
+      setTimeout(() => {
+        const active = document.activeElement;
+        editingInput = !!(active && ["INPUT", "TEXTAREA", "SELECT"].includes(active.tagName));
+        document.body.classList.toggle("mobile-input-focused", editingInput);
+        if (!editingInput) {
+          updateLandscapeWorkspaceState();
+          window.dispatchEvent(new Event("resize"));
+        }
+      }, 120);
     });
   });
 
@@ -181,5 +202,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   if (isMobileLayout()) setMode("edit");
-  setInterval(updateLandscapeWorkspaceState, 800);
+  setInterval(() => {
+    if (editingInput && document.body.classList.contains("mobile-edit")) return;
+    updateLandscapeWorkspaceState();
+  }, 1000);
 });
